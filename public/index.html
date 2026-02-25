@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PPL Season 7 — Auction System</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#08080d;color:#f0f0ff;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(rgba(0,255,135,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,0.02) 1px,transparent 1px);
+  background-size:50px 50px;}
+.container{text-align:center;padding:2.5rem 2rem}
+.league-logo{width:100px;height:100px;object-fit:contain;margin-bottom:1rem;display:none}
+.logo{font-size:clamp(4rem,14vw,9rem);font-weight:900;letter-spacing:0.25em;
+  color:transparent;-webkit-text-stroke:2px rgba(0,255,135,0.45);margin-bottom:0;line-height:0.85}
+.season{font-family:'DM Mono',monospace;font-size:clamp(0.65rem,1.3vw,0.85rem);letter-spacing:0.4em;
+  color:rgba(0,255,135,0.45);text-transform:uppercase;margin-bottom:3rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;max-width:760px;margin:0 auto}
+.card{background:#111118;border:1px solid #1c1c2a;padding:1.8rem 1.5rem;text-decoration:none;
+  color:inherit;transition:all 0.2s;display:flex;flex-direction:column;gap:0.4rem;text-align:left;border-radius:3px}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.card-icon{font-size:2rem;margin-bottom:0.4rem}
+.card-title{font-size:1.4rem;font-weight:800;letter-spacing:0.04em}
+.card-desc{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.04em;color:#4444aa;line-height:1.5}
+.card-url{font-family:'DM Mono',monospace;font-size:0.6rem;margin-top:0.4rem}
+.a{border-color:rgba(0,255,135,0.2)}.a:hover{border-color:rgba(0,255,135,0.4)}.a .card-title{color:#00ff87}.a .card-url{color:rgba(0,255,135,0.3)}
+.b{border-color:rgba(76,201,240,0.2)}.b:hover{border-color:rgba(76,201,240,0.4)}.b .card-title{color:#4cc9f0}.b .card-url{color:rgba(76,201,240,0.3)}
+.c{border-color:rgba(255,209,102,0.2)}.c:hover{border-color:rgba(255,209,102,0.4)}.c .card-title{color:#ffd166}.c .card-url{color:rgba(255,209,102,0.3)}
+</style>
+</head>
+<body>
+<div class="container">
+  <img class="league-logo" id="leagueLogo" src="" alt=""/>
+  <div class="logo" id="leagueName">PPL</div>
+  <div class="season" id="leagueSeason">Premier Player League · Season 7 · Auction System</div>
+  <div class="cards">
+    <a class="card a" href="/admin.html">
+      <div class="card-icon">🎛️</div>
+      <div class="card-title">Admin Control</div>
+      <div class="card-desc">Run the auction — start lots, accept bids, hammer players, manage pool & teams</div>
+      <div class="card-url">/admin.html</div>
+    </a>
+    <a class="card b" href="/projector.html">
+      <div class="card-icon">🖥️</div>
+      <div class="card-title">Projector</div>
+      <div class="card-desc">Big screen for the audience — current player, live bids, team budgets strip</div>
+      <div class="card-url">/projector.html</div>
+    </a>
+    <a class="card c" href="/manager.html">
+      <div class="card-icon">👤</div>
+      <div class="card-title">Manager</div>
+      <div class="card-desc">Team portal — bid on players, track budget & squad roster</div>
+      <div class="card-url">/manager.html</div>
+    </a>
+  </div>
+</div>
+<script>
+const socket = io();
+socket.on('stateUpdate', ({config}) => {
+  if (!config) return;
+  const ll = document.getElementById('leagueLogo');
+  if (config.leagueLogo) { ll.src=config.leagueLogo; ll.style.display='block'; }
+  document.getElementById('leagueName').textContent = config.leagueName || 'PPL';
+  document.getElementById('leagueSeason').textContent = `${config.leagueName||'PPL'} · ${config.leagueSeason||'Season 7'} · Auction System`;
+});
+</script>
+</body>
+</html>

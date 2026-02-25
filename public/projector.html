@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PPL S7 — Projector</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080d;--green:#00ff87;--gd:rgba(0,255,135,0.08);--gb:rgba(0,255,135,0.2);
+  --yellow:#ffd166;--red:#ff3b5c;--text:#f0f0ff;--td:#5555aa;
+  --ff:'Barlow Condensed',sans-serif;--ffm:'DM Mono',monospace;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--ff)}
+
+/* ─── IDLE ─── */
+#idleScreen{
+  position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg);z-index:10;
+  background-image:radial-gradient(circle at 20% 50%,rgba(0,255,135,0.04) 0%,transparent 55%),
+    radial-gradient(circle at 80% 50%,rgba(76,201,240,0.04) 0%,transparent 55%);
+}
+.idle-logo-wrap{margin-bottom:1.5rem}
+.idle-league-logo{width:clamp(80px,12vw,140px);height:clamp(80px,12vw,140px);object-fit:contain}
+.idle-league-text{font-size:clamp(4rem,12vw,9rem);font-weight:900;letter-spacing:0.2em;
+  color:transparent;-webkit-text-stroke:2px rgba(0,255,135,0.35);text-transform:uppercase;line-height:0.85;text-align:center}
+.idle-season{font-size:clamp(0.8rem,2.5vw,1.8rem);font-weight:300;letter-spacing:0.5em;
+  text-transform:uppercase;color:var(--td);margin-top:0.8rem;text-align:center}
+.idle-tag{margin-top:2.5rem;font-family:var(--ffm);font-size:0.75rem;letter-spacing:0.15em;
+  color:var(--green);opacity:0.5;animation:blink 2.5s infinite;text-align:center}
+@keyframes blink{0%,100%{opacity:0.5}50%{opacity:0.15}}
+/* grid */
+#idleScreen::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,255,135,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,135,0.025) 1px,transparent 1px);
+  background-size:55px 55px;pointer-events:none}
+
+/* ─── MAIN ─── */
+#mainScreen{position:fixed;inset:0;display:none;background:var(--bg)}
+
+/* Ambient bg glow */
+.bg-glow{position:absolute;inset:0;pointer-events:none}
+.bg-glow-inner{position:absolute;inset:-20%;opacity:0.12;background-size:cover;background-position:center;filter:blur(100px) saturate(2);transition:opacity 0.8s}
+
+/* Layout */
+.main-layout{position:relative;z-index:2;width:100%;height:100%;display:grid;grid-template-columns:42% 1fr 300px}
+
+/* Photo section */
+.photo-section{position:relative;overflow:hidden}
+.photo-section img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.photo-right-fade{position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,var(--bg) 100%)}
+.photo-bottom-fade{position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to top,var(--bg),transparent)}
+
+/* Info section */
+.info-section{display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(2rem,4vw,4rem) clamp(1.5rem,3vw,3rem);position:relative}
+
+/* League logo in corner */
+.league-logo-corner{position:absolute;top:clamp(1rem,3vh,2.5rem);left:clamp(1.5rem,3vw,3rem);display:flex;align-items:center;gap:0.8rem;opacity:0.7}
+.league-logo-corner img{width:clamp(36px,5vw,54px);height:clamp(36px,5vw,54px);object-fit:contain}
+.league-logo-corner span{font-size:clamp(0.7rem,1.2vw,0.9rem);font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--td)}
+
+.player-pos{display:inline-flex;align-items:center;align-self:flex-start;
+  background:var(--green);color:#000;padding:0.35rem 1rem;
+  font-size:clamp(0.9rem,2vw,1.4rem);font-weight:900;letter-spacing:0.15em;
+  text-transform:uppercase;margin-bottom:0.8rem}
+.player-name{font-size:clamp(2.5rem,7vw,7.5rem);font-weight:900;
+  line-height:0.88;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:0.6rem;
+  text-shadow:0 4px 40px rgba(0,0,0,0.5)}
+.player-rating{display:flex;align-items:center;gap:1.2rem;margin-bottom:clamp(1.5rem,3vh,3rem)}
+.rating-bubble{width:clamp(44px,6vw,68px);height:clamp(44px,6vw,68px);border-radius:50%;
+  border:2px solid var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--green);line-height:1}
+.rating-bubble .num{font-size:clamp(1rem,2.2vw,1.8rem);font-weight:900}
+.rating-bubble .lbl{font-size:0.35em;letter-spacing:0.1em;opacity:0.6;font-weight:400}
+.base-tag{font-family:var(--ffm);font-size:clamp(0.6rem,1.1vw,0.85rem);color:var(--td);letter-spacing:0.06em}
+
+/* Bid panel */
+.bid-panel{display:flex;flex-direction:column;
+  background:rgba(0,0,0,0.55);border-left:1px solid rgba(0,255,135,0.08);
+  backdrop-filter:blur(24px);padding:clamp(1.5rem,3vh,2.5rem) clamp(1rem,2vw,1.8rem);position:relative;overflow:hidden}
+.bid-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--green),transparent)}
+
+.cb-section{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:0.5rem}
+.cb-lbl{font-family:var(--ffm);font-size:clamp(0.55rem,0.9vw,0.72rem);letter-spacing:0.2em;text-transform:uppercase;color:var(--td)}
+.cb-amount{font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;color:var(--green);line-height:0.9;
+  text-shadow:0 0 30px rgba(0,255,135,0.4);transition:all 0.15s}
+.cb-amount.flash{animation:bidFlash 0.45s ease}
+@keyframes bidFlash{0%{transform:scale(1)}30%{transform:scale(1.1);color:#fff;text-shadow:0 0 60px var(--green)}100%{transform:scale(1);color:var(--green)}}
+
+.leader-block{display:flex;flex-direction:column;align-items:center;gap:0.4rem;margin-top:0.5rem}
+.leader-logo{width:clamp(40px,5vw,64px);height:clamp(40px,5vw,64px);object-fit:contain;border-radius:4px}
+.leader-name{font-size:clamp(1rem,2.2vw,1.8rem);font-weight:900;letter-spacing:0.06em;
+  padding:0.35rem 1rem;border-radius:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.next-bid{margin-top:1rem;text-align:center}
+.next-bid-lbl{font-family:var(--ffm);font-size:clamp(0.5rem,0.8vw,0.62rem);letter-spacing:0.15em;text-transform:uppercase;color:var(--td);margin-bottom:0.2rem}
+.next-bid-val{font-family:var(--ffm);font-size:clamp(0.8rem,1.5vw,1.1rem);color:rgba(0,255,135,0.5)}
+
+/* Bid history */
+.bh-section{margin-top:auto}
+.bh-title{font-family:var(--ffm);font-size:clamp(0.5rem,0.8vw,0.62rem);letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--td);padding-bottom:0.4rem;border-bottom:1px solid rgba(255,255,255,0.04);margin-bottom:0.6rem}
+.bh-entry{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:clamp(0.75rem,1.2vw,0.95rem);animation:slideIn 0.3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.bh-tlogo{width:clamp(16px,2vw,22px);height:clamp(16px,2vw,22px);object-fit:contain;border-radius:2px;flex-shrink:0}
+.bh-team{font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bh-amt{font-family:var(--ffm);font-size:0.85em;flex-shrink:0}
+
+/* ─── SOLD / UNSOLD overlay ─── */
+#resultOverlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;
+  background:rgba(0,0,0,0.88);backdrop-filter:blur(15px)}
+.result-word{font-size:clamp(5rem,18vw,15rem);font-weight:900;letter-spacing:0.1em;line-height:1;text-align:center}
+.result-word.sold{color:var(--green);text-shadow:0 0 100px rgba(0,255,135,0.7);animation:soldPop 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes soldPop{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.result-word.unsold{color:var(--red);text-shadow:0 0 80px rgba(255,59,92,0.6)}
+.result-detail{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.result-player{font-size:clamp(1.5rem,4vw,3.5rem);font-weight:700;letter-spacing:0.08em;color:var(--text)}
+.result-team-wrap{display:flex;align-items:center;gap:1rem;margin-top:0.3rem}
+.result-team-logo{width:clamp(40px,6vw,70px);height:clamp(40px,6vw,70px);object-fit:contain;border-radius:4px}
+.result-team-name{font-size:clamp(1.2rem,3vw,2.8rem);font-weight:800;letter-spacing:0.06em}
+.result-price{font-family:var(--ffm);font-size:clamp(1rem,2.5vw,2rem);color:var(--green);letter-spacing:0.06em;margin-top:0.2rem}
+
+/* ─── TEAMS STRIP ─── */
+#teamsStrip{
+  position:fixed;bottom:0;left:0;right:0;z-index:5;
+  background:rgba(8,8,13,0.94);border-top:1px solid rgba(0,255,135,0.08);
+  backdrop-filter:blur(15px);
+  display:flex;align-items:stretch;height:clamp(52px,7.5vh,76px);
+}
+.strip-team{flex:1;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(0.6rem,1.5vw,1.4rem);border-right:1px solid rgba(255,255,255,0.03);gap:0.6rem}
+.strip-team:last-child{border-right:none}
+.strip-team.leading{background:rgba(0,255,135,0.04)}
+.st-logo{width:clamp(28px,4vw,42px);height:clamp(28px,4vw,42px);object-fit:contain;border-radius:3px;flex-shrink:0}
+.st-name-wrap{flex:1;min-width:0}
+.st-name{font-size:clamp(0.7rem,1.7vw,1.2rem);font-weight:800;letter-spacing:0.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-count{font-family:var(--ffm);font-size:clamp(0.45rem,0.7vw,0.58rem);color:var(--td);letter-spacing:0.05em}
+.st-budget{text-align:right;flex-shrink:0}
+.st-budget-num{font-size:clamp(0.9rem,1.9vw,1.4rem);font-weight:900;color:var(--green)}
+.st-budget-lbl{font-family:var(--ffm);font-size:clamp(0.4rem,0.6vw,0.52rem);letter-spacing:0.06em;color:var(--td);text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- IDLE -->
+<div id="idleScreen">
+  <div class="idle-logo-wrap" id="idleLogoWrap" style="display:none">
+    <img class="idle-league-logo" id="idleLeagueLogo" src="" alt=""/>
+  </div>
+  <div class="idle-league-text" id="idleLeagueName">PPL</div>
+  <div class="idle-season" id="idleLeagueSeason">Premier Player League · Season 7</div>
+  <div class="idle-tag">⚽ AUCTION BEGINS SHORTLY</div>
+</div>
+
+<!-- MAIN -->
+<div id="mainScreen">
+  <div class="bg-glow"><div class="bg-glow-inner" id="bgGlow"></div></div>
+  <div class="main-layout">
+    <div class="photo-section">
+      <img id="playerPhoto" src="" alt=""/>
+      <div class="photo-right-fade"></div>
+      <div class="photo-bottom-fade"></div>
+    </div>
+    <div class="info-section">
+      <div class="league-logo-corner" id="leagueLogoCorner" style="display:none">
+        <img id="leagueLogoCornerImg" src="" alt=""/>
+        <span id="leagueNameCorner"></span>
+      </div>
+      <div class="player-pos" id="playerPos"></div>
+      <div class="player-name" id="playerName"></div>
+      <div class="player-rating">
+        <div class="rating-bubble"><span class="num" id="playerRating"></span><span class="lbl">OVR</span></div>
+        <div class="base-tag" id="playerBase"></div>
+      </div>
+    </div>
+    <div class="bid-panel">
+      <div class="cb-section">
+        <div class="cb-lbl">Current Bid</div>
+        <div class="cb-amount" id="cbAmount"></div>
+        <div class="leader-block">
+          <img class="leader-logo" id="leaderLogo" src="" alt="" style="display:none"/>
+          <div class="leader-name" id="leaderName" style="background:#222;color:#666">No bids yet</div>
+        </div>
+        <div class="next-bid" id="nextBidArea">
+          <div class="next-bid-lbl">Next bid</div>
+          <div class="next-bid-val" id="nextBidVal"></div>
+        </div>
+      </div>
+      <div class="bh-section">
+        <div class="bh-title">Bid History</div>
+        <div id="bidHistory"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div id="resultOverlay">
+  <div class="result-word" id="resultWord"></div>
+  <div class="result-detail">
+    <div class="result-player" id="resultPlayer"></div>
+    <div class="result-team-wrap" id="resultTeamWrap" style="display:none">
+      <img class="result-team-logo" id="resultTeamLogo" src="" alt=""/>
+      <div class="result-team-name" id="resultTeamName"></div>
+    </div>
+    <div class="result-price" id="resultPrice"></div>
+  </div>
+</div>
+
+<!-- TEAMS STRIP -->
+<div id="teamsStrip"></div>
+
+<script>
+const socket = io();
+let S = { auctionState:{phase:'idle',currentBid:0}, teams:[], players:[], config:{} };
+
+socket.on('stateUpdate', data => {
+  S = data; render();
+});
+socket.on('bidFlash', () => {
+  const el = document.getElementById('cbAmount');
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+});
+socket.on('playerSold', ({ player, team, price }) => {
+  showResult('SOLD!', player, team, `₹${price.toLocaleString()}`, 'sold', 5000);
+});
+socket.on('playerUnsold', ({ player }) => {
+  showResult('UNSOLD', player, null, '', 'unsold', 3500);
+});
+
+function render() {
+  const { auctionState:as, teams, config } = S;
+  renderBranding(config);
+  renderTeamsStrip(as, teams);
+  if (!as.currentPlayer || as.phase === 'idle') {
+    document.getElementById('idleScreen').style.display = 'flex';
+    document.getElementById('mainScreen').style.display = 'none';
+    return;
+  }
+  document.getElementById('idleScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display = 'block';
+  renderPlayer(as, config);
+}
+
+function renderBranding(cfg) {
+  // Idle screen
+  const idleLogo = document.getElementById('idleLogoWrap');
+  if (cfg.leagueLogo) {
+    document.getElementById('idleLeagueLogo').src = cfg.leagueLogo;
+    idleLogo.style.display = 'block';
+  } else idleLogo.style.display = 'none';
+  document.getElementById('idleLeagueName').textContent   = cfg.leagueName || 'PPL';
+  document.getElementById('idleLeagueSeason').textContent = `${cfg.leagueName||'PPL'} · ${cfg.leagueSeason||'Season 7'}`;
+
+  // Corner logo
+  const corner = document.getElementById('leagueLogoCorner');
+  if (cfg.leagueLogo) {
+    document.getElementById('leagueLogoCornerImg').src = cfg.leagueLogo;
+    document.getElementById('leagueNameCorner').textContent = cfg.leagueSeason || '';
+    corner.style.display = 'flex';
+  } else corner.style.display = 'none';
+}
+
+function renderPlayer(as, config) {
+  const { currentPlayer:p, currentBid, leadingTeam, bidHistory } = as;
+  document.getElementById('playerPhoto').src  = p.photo;
+  document.getElementById('bgGlow').style.backgroundImage = `url(${p.photo})`;
+  document.getElementById('playerPos').textContent     = p.position;
+  document.getElementById('playerName').textContent    = p.name;
+  document.getElementById('playerRating').textContent  = p.rating;
+  document.getElementById('playerBase').textContent    = `BASE PRICE: ₹${p.basePrice.toLocaleString()}`;
+  document.getElementById('cbAmount').textContent      = `₹${currentBid.toLocaleString()}`;
+
+  // Leader
+  const ldrName = document.getElementById('leaderName');
+  const ldrLogo = document.getElementById('leaderLogo');
+  if (leadingTeam) {
+    ldrName.textContent       = leadingTeam.name;
+    ldrName.style.background  = leadingTeam.color;
+    ldrName.style.color       = '#000';
+    if (leadingTeam.logo) { ldrLogo.src = leadingTeam.logo; ldrLogo.style.display='block'; }
+    else ldrLogo.style.display = 'none';
+  } else {
+    ldrName.textContent = 'No bids yet';
+    ldrName.style.background = '#222'; ldrName.style.color = '#555';
+    ldrLogo.style.display = 'none';
+  }
+
+  // Next bid
+  const inc = currentBid < (config.thresholdBid??200) ? (config.highIncrement??20) : (config.lowIncrement??10);
+  document.getElementById('nextBidVal').textContent = `₹${(currentBid+inc).toLocaleString()} (+₹${inc})`;
+
+  // Bid history
+  const bh = document.getElementById('bidHistory');
+  bh.innerHTML = (bidHistory||[]).slice(0,6).map((b,i)=>`
+    <div class="bh-entry">
+      ${b.logo?`<img class="bh-tlogo" src="${b.logo}" alt=""/>`:'<div style="width:18px;height:18px;border-radius:50%;flex-shrink:0;background:'+b.color+'22;border:1px solid '+b.color+'44"></div>'}
+      <span class="bh-team" style="color:${b.color}">${i===0?'🏆 ':''}${b.team}</span>
+      <span class="bh-amt" style="color:var(--green)">₹${b.amount.toLocaleString()}</span>
+    </div>`).join('');
+}
+
+function renderTeamsStrip(as, teams) {
+  document.getElementById('teamsStrip').innerHTML = teams.map(t => {
+    const remaining = t.budget - t.spent;
+    const isLeading = as.leadingTeam?.id === t.id;
+    return `<div class="strip-team ${isLeading?'leading':''}">
+      ${t.logo
+        ? `<img class="st-logo" src="${t.logo}" alt=""/>`
+        : `<div class="st-logo" style="border-radius:50%;background:${t.color};opacity:${isLeading?0.5:0.2}"></div>`}
+      <div class="st-name-wrap">
+        <div class="st-name" style="color:${t.color};${isLeading?'text-shadow:0 0 12px '+t.color+'99;':''}">${t.name}</div>
+        <div class="st-count">${t.players.length} player${t.players.length!==1?'s':''}</div>
+      </div>
+      <div class="st-budget">
+        <div class="st-budget-num" style="${isLeading?'color:'+t.color:''}">${isLeading?'⬆ ':''}₹${remaining.toLocaleString()}</div>
+        <div class="st-budget-lbl">Left</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showResult(word, player, team, price, type, dur) {
+  const ov = document.getElementById('resultOverlay');
+  document.getElementById('resultWord').textContent = word;
+  document.getElementById('resultWord').className   = `result-word ${type}`;
+  document.getElementById('resultPlayer').textContent = player.name;
+  document.getElementById('resultPrice').textContent  = price;
+  const tw = document.getElementById('resultTeamWrap');
+  if (team) {
+    document.getElementById('resultTeamName').textContent = team.name;
+    document.getElementById('resultTeamName').style.color = team.color;
+    const tlogo = document.getElementById('resultTeamLogo');
+    if (team.logo) { tlogo.src=team.logo; tlogo.style.display='block'; } else tlogo.style.display='none';
+    tw.style.display = 'flex';
+  } else tw.style.display = 'none';
+  ov.style.display = 'flex';
+  setTimeout(()=>{ ov.style.display='none'; }, dur);
+}
+
+render();
+</script>
+</body>
+</html>
