@@ -7,50 +7,72 @@
 <script src="/socket.io/socket.io.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#08080d;color:#f0f0ff;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background-image:linear-gradient(rgba(0,255,135,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,135,0.02) 1px,transparent 1px);
-  background-size:50px 50px;}
-.container{text-align:center;padding:2.5rem 2rem}
-.league-logo{width:100px;height:100px;object-fit:contain;margin-bottom:1rem;display:none}
-.logo{font-size:clamp(4rem,14vw,9rem);font-weight:900;letter-spacing:0.25em;
-  color:transparent;-webkit-text-stroke:2px rgba(0,255,135,0.45);margin-bottom:0;line-height:0.85}
-.season{font-family:'DM Mono',monospace;font-size:clamp(0.65rem,1.3vw,0.85rem);letter-spacing:0.4em;
-  color:rgba(0,255,135,0.45);text-transform:uppercase;margin-bottom:3rem}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;max-width:760px;margin:0 auto}
-.card{background:#111118;border:1px solid #1c1c2a;padding:1.8rem 1.5rem;text-decoration:none;
-  color:inherit;transition:all 0.2s;display:flex;flex-direction:column;gap:0.4rem;text-align:left;border-radius:3px}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
-.card-icon{font-size:2rem;margin-bottom:0.4rem}
-.card-title{font-size:1.4rem;font-weight:800;letter-spacing:0.04em}
-.card-desc{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.04em;color:#4444aa;line-height:1.5}
-.card-url{font-family:'DM Mono',monospace;font-size:0.6rem;margin-top:0.4rem}
-.a{border-color:rgba(0,255,135,0.2)}.a:hover{border-color:rgba(0,255,135,0.4)}.a .card-title{color:#00ff87}.a .card-url{color:rgba(0,255,135,0.3)}
-.b{border-color:rgba(76,201,240,0.2)}.b:hover{border-color:rgba(76,201,240,0.4)}.b .card-title{color:#4cc9f0}.b .card-url{color:rgba(76,201,240,0.3)}
-.c{border-color:rgba(255,209,102,0.2)}.c:hover{border-color:rgba(255,209,102,0.4)}.c .card-title{color:#ffd166}.c .card-url{color:rgba(255,209,102,0.3)}
+:root{
+  --bg:#060610;--card:#1a1a2e;--border:#252545;
+  --green:#00e676;--text:#eeeef8;--td:#5555a8;
+  --ff:'Barlow Condensed',sans-serif;--ffm:'DM Mono',monospace;
+}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--ff);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background-image:
+    radial-gradient(ellipse 50% 50% at 50% 35%, rgba(0,230,118,0.04) 0%, transparent 65%),
+    linear-gradient(rgba(0,230,118,0.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,230,118,0.02) 1px,transparent 1px);
+  background-size:100% 100%, 50px 50px, 50px 50px;
+}
+.wrap{text-align:center;padding:3rem 2rem;max-width:780px;width:100%}
+.league-logo{width:90px;height:90px;object-fit:contain;margin-bottom:1rem;display:none}
+.headline{font-size:clamp(4.5rem,14vw,8.5rem);font-weight:900;letter-spacing:0.22em;
+  color:transparent;-webkit-text-stroke:2px rgba(0,230,118,0.42);
+  line-height:0.85;margin-bottom:0}
+.subline{font-family:var(--ffm);font-size:clamp(0.6rem,1.3vw,0.82rem);
+  letter-spacing:0.4em;color:rgba(0,230,118,0.4);text-transform:uppercase;margin-bottom:3.5rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  padding:1.8rem 1.5rem;text-decoration:none;color:inherit;
+  transition:all 0.2s ease;display:flex;flex-direction:column;gap:0.4rem;
+  text-align:left;border-radius:8px;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 100%,currentColor,transparent);
+  transition:opacity 0.25s;pointer-events:none;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5)}
+.card:hover::before{opacity:0.04}
+.card-icon{font-size:2rem;margin-bottom:0.5rem}
+.card-title{font-size:1.45rem;font-weight:800;letter-spacing:0.04em}
+.card-desc{font-family:var(--ffm);font-size:0.6rem;letter-spacing:0.04em;color:#3333aa;line-height:1.55}
+.card-url{font-family:var(--ffm);font-size:0.58rem;margin-top:0.5rem;opacity:0.35}
+.c-admin{border-color:rgba(0,230,118,0.2)}.c-admin:hover{border-color:rgba(0,230,118,0.45);box-shadow:0 16px 48px rgba(0,230,118,0.08)}.c-admin .card-title{color:#00e676}
+.c-proj{border-color:rgba(64,196,255,0.18)}.c-proj:hover{border-color:rgba(64,196,255,0.4);box-shadow:0 16px 48px rgba(64,196,255,0.06)}.c-proj .card-title{color:#40c4ff}
+.c-mgr{border-color:rgba(255,193,7,0.18)}.c-mgr:hover{border-color:rgba(255,193,7,0.4);box-shadow:0 16px 48px rgba(255,193,7,0.06)}.c-mgr .card-title{color:#ffc107}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
   <img class="league-logo" id="leagueLogo" src="" alt=""/>
-  <div class="logo" id="leagueName">PPL</div>
-  <div class="season" id="leagueSeason">Premier Player League · Season 7 · Auction System</div>
+  <div class="headline" id="headline">PPL</div>
+  <div class="subline" id="subline">Premier Player League · Season 7 · Auction System</div>
   <div class="cards">
-    <a class="card a" href="/admin.html">
+    <a class="card c-admin" href="/admin.html">
       <div class="card-icon">🎛️</div>
       <div class="card-title">Admin Control</div>
-      <div class="card-desc">Run the auction — start lots, accept bids, hammer players, manage pool & teams</div>
+      <div class="card-desc">Password-protected. Run the auction, accept bids, manage players & teams.</div>
       <div class="card-url">/admin.html</div>
     </a>
-    <a class="card b" href="/projector.html">
+    <a class="card c-proj" href="/projector.html" target="_blank">
       <div class="card-icon">🖥️</div>
       <div class="card-title">Projector</div>
-      <div class="card-desc">Big screen for the audience — current player, live bids, team budgets strip</div>
+      <div class="card-desc">Full-screen for audience. Current player, live bid, team strip at bottom.</div>
       <div class="card-url">/projector.html</div>
     </a>
-    <a class="card c" href="/manager.html">
+    <a class="card c-mgr" href="/manager.html">
       <div class="card-icon">👤</div>
       <div class="card-title">Manager</div>
-      <div class="card-desc">Team portal — bid on players, track budget & squad roster</div>
+      <div class="card-desc">Bid on players, view squad, check budget standings vs other teams.</div>
       <div class="card-url">/manager.html</div>
     </a>
   </div>
@@ -61,8 +83,8 @@ socket.on('stateUpdate', ({config}) => {
   if (!config) return;
   const ll = document.getElementById('leagueLogo');
   if (config.leagueLogo) { ll.src=config.leagueLogo; ll.style.display='block'; }
-  document.getElementById('leagueName').textContent = config.leagueName || 'PPL';
-  document.getElementById('leagueSeason').textContent = `${config.leagueName||'PPL'} · ${config.leagueSeason||'Season 7'} · Auction System`;
+  document.getElementById('headline').textContent = config.leagueName || 'PPL';
+  document.getElementById('subline').textContent  = `${config.leagueName||'PPL'} · ${config.leagueSeason||'Season 7'} · Auction System`;
 });
 </script>
 </body>
