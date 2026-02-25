@@ -167,6 +167,10 @@ io.on('connection', (socket) => {
     if (amount < basePrice) {
       socket.emit('bidError', { msg: `Bid must be at least base price ₹${basePrice}` }); return;
     }
+    // Allow bidding AT the base price (first bid), but must exceed current bid if it's already been bid on
+    if (auctionState.leadingTeam && amount <= auctionState.currentBid) {
+      socket.emit('bidError', { msg: `Bid ₹${amount} must exceed current bid ₹${auctionState.currentBid}` }); return;
+    }
     if (amount > remaining) {
       socket.emit('bidError', { msg: `${team.name} has no budget (₹${remaining} left).` }); return;
     }
@@ -174,9 +178,7 @@ io.on('connection', (socket) => {
       const need = config.minPlayersPerTeam - team.players.length - 1;
       socket.emit('bidError', { msg: `${team.name} must keep budget for ${need} more player${need !== 1 ? 's' : ''}. Max bid: ₹${maxBid}` }); return;
     }
-    if (amount <= auctionState.currentBid) {
-      socket.emit('bidError', { msg: `Bid ₹${amount} must exceed ₹${auctionState.currentBid}` }); return;
-    }
+
 
     // Save snapshot before mutating (for undo)
     previousBidSnapshot = {

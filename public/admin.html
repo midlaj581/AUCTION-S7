@@ -11,266 +11,231 @@
   --bg:#060610;--bg2:#0b0b1a;--bg3:#101020;--bg4:#181830;--card:#1a1a2e;--border:#252545;
   --green:#00e676;--gd:rgba(0,230,118,0.08);--gb:rgba(0,230,118,0.18);--glow:rgba(0,230,118,0.35);
   --red:#ff4757;--rd:rgba(255,71,87,0.1);--yellow:#ffc107;--blue:#40c4ff;
-  --text:#eeeef8;--td:#7878a8;--tm:#333358;
+  --text:#eeeef8;--td:#7070a0;--tm:#333358;
   --ff:'Barlow Condensed',sans-serif;--ffi:Inter,sans-serif;--ffm:'DM Mono',monospace;
-  --radius:6px;
+  --r:6px;
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px;min-height:100vh;overflow-x:hidden}
 
-/* ── PASSWORD SCREEN ─────────────────────────────────────────────────────── */
+/* ── LOGIN ─────────────────────────────────────────────────────────────── */
 #loginScreen{
-  position:fixed;inset:0;z-index:999;
-  background:radial-gradient(ellipse 70% 70% at 50% 40%,rgba(0,230,118,0.06) 0%,var(--bg) 70%);
-  display:flex;align-items:center;justify-content:center;
+  position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(0,230,118,0.06) 0%,var(--bg) 70%);
 }
-.login-card{
-  background:var(--card);border:1px solid var(--gb);border-radius:12px;
-  padding:2.5rem;width:90%;max-width:380px;text-align:center;
-  box-shadow:0 20px 80px rgba(0,0,0,0.6),0 0 0 1px var(--gb);
-}
-.login-icon{font-size:3rem;margin-bottom:0.5rem}
-.login-title{font-size:2rem;font-weight:900;letter-spacing:0.1em;color:var(--green);margin-bottom:0.2rem}
-.login-sub{font-family:var(--ffm);font-size:0.65rem;letter-spacing:0.2em;color:var(--td);text-transform:uppercase;margin-bottom:2rem}
-.pw-input{
-  width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+.lc{background:var(--card);border:1px solid var(--gb);border-radius:12px;padding:2.5rem;width:90%;max-width:360px;text-align:center;box-shadow:0 20px 80px rgba(0,0,0,0.6)}
+.lc-icon{font-size:2.8rem;margin-bottom:0.4rem}
+.lc-title{font-size:2.2rem;font-weight:900;letter-spacing:0.12em;color:var(--green);margin-bottom:0.15rem}
+.lc-sub{font-family:var(--ffm);font-size:0.62rem;letter-spacing:0.2em;color:var(--td);text-transform:uppercase;margin-bottom:1.8rem}
+.pw-in{
+  width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
   color:var(--text);font-family:var(--ffi);font-size:1.1rem;
-  padding:0.8rem 1rem;outline:none;text-align:center;letter-spacing:0.15em;margin-bottom:0.8rem;
+  padding:0.75rem 1rem;outline:none;text-align:center;letter-spacing:0.15em;margin-bottom:0.7rem;
   transition:border-color 0.2s;
 }
-.pw-input:focus{border-color:var(--gb);box-shadow:0 0 0 3px rgba(0,230,118,0.1)}
+.pw-in:focus{border-color:var(--gb);box-shadow:0 0 0 3px rgba(0,230,118,0.1)}
 .pw-btn{
-  width:100%;padding:0.85rem;background:var(--green);border:none;border-radius:var(--radius);
+  width:100%;padding:0.8rem;background:var(--green);border:none;border-radius:var(--r);
   color:#000;font-family:var(--ff);font-size:1.1rem;font-weight:800;letter-spacing:0.1em;
   text-transform:uppercase;cursor:pointer;transition:all 0.15s;
 }
 .pw-btn:hover{background:#33ffaa;box-shadow:0 0 20px var(--glow)}
-.pw-err{color:var(--red);font-family:var(--ffm);font-size:0.7rem;margin-top:0.5rem;min-height:1em}
+.pw-err{color:var(--red);font-family:var(--ffm);font-size:0.68rem;margin-top:0.5rem;min-height:1em}
 
-/* ── TOPBAR ──────────────────────────────────────────────────────────────── */
+/* ── TOPBAR ─────────────────────────────────────────────────────────────── */
 #adminApp{display:none}
-.topbar{
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  padding:0 1.5rem;height:56px;display:flex;align-items:center;
-  justify-content:space-between;position:sticky;top:0;z-index:100;
-}
-.topbar-left{display:flex;align-items:center;gap:0.8rem}
-.t-logo{width:34px;height:34px;object-fit:contain;border-radius:4px}
-.t-title{font-size:1.3rem;font-weight:800;letter-spacing:0.18em;color:var(--green)}
-.t-title span{color:var(--td);font-weight:400}
-.phase-pill{padding:0.22rem 0.75rem;border-radius:20px;font-family:var(--ffm);font-size:0.62rem;letter-spacing:0.08em;border:1px solid;text-transform:uppercase}
-.pi{border-color:var(--tm);color:var(--tm)}
-.pl{border-color:var(--green);color:var(--green);background:var(--gd);animation:glowPulse 2s infinite}
-.ps{border-color:var(--yellow);color:var(--yellow)}
-.pu{border-color:var(--red);color:var(--red)}
-@keyframes glowPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px var(--glow)}}
-.topbar-right{display:flex;gap:0.5rem}
-
-/* ── LINKS BAR ───────────────────────────────────────────────────────────── */
-.links{display:flex;gap:0.5rem;padding:0.55rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border)}
-.links a{color:var(--green);text-decoration:none;padding:0.2rem 0.7rem;border:1px solid var(--gb);border-radius:4px;font-family:var(--ffm);font-size:0.65rem;letter-spacing:0.06em;transition:all 0.15s}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tb-l{display:flex;align-items:center;gap:0.7rem}
+.tb-logo{width:32px;height:32px;object-fit:contain;border-radius:4px}
+.tb-title{font-size:1.25rem;font-weight:800;letter-spacing:0.18em;color:var(--green)}
+.tb-title span{color:var(--td);font-weight:400}
+.phase-pill{padding:0.2rem 0.7rem;border-radius:20px;font-family:var(--ffm);font-size:0.6rem;letter-spacing:0.08em;border:1px solid;text-transform:uppercase}
+.pp-idle{border-color:var(--tm);color:var(--tm)}
+.pp-live{border-color:var(--green);color:var(--green);background:var(--gd);animation:glow 2s infinite}
+.pp-sold{border-color:var(--yellow);color:var(--yellow)}
+.pp-unsold{border-color:var(--red);color:var(--red)}
+@keyframes glow{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px var(--glow)}}
+.tb-r{display:flex;gap:0.45rem}
+.links{display:flex;gap:0.45rem;padding:0.5rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border)}
+.links a{color:var(--green);text-decoration:none;padding:0.18rem 0.65rem;border:1px solid var(--gb);border-radius:4px;font-family:var(--ffm);font-size:0.62rem;letter-spacing:0.06em;transition:all 0.15s}
 .links a:hover{background:var(--gd)}
-.links span{color:var(--tm);font-family:var(--ffm);font-size:0.65rem;align-self:center}
+.links span{color:var(--tm);font-family:var(--ffm);font-size:0.62rem;align-self:center}
 
-/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
-.layout{display:grid;grid-template-columns:1fr 350px;gap:1.2rem;padding:1.2rem;max-width:1500px;margin:0 auto}
-.col{display:flex;flex-direction:column;gap:1.2rem}
+/* ── LAYOUT ─────────────────────────────────────────────────────────────── */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:1.1rem;padding:1.1rem;max-width:1500px;margin:0 auto}
+.col{display:flex;flex-direction:column;gap:1.1rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r)}
+.ph{padding:0.7rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap}
+.pt{font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--td)}
+.pb{padding:1rem}
 
-/* ── PANEL ───────────────────────────────────────────────────────────────── */
-.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
-.ph{padding:0.75rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:0.5rem;flex-wrap:wrap}
-.pt{font-family:var(--ffm);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--td)}
-.pb{padding:1.1rem}
-
-/* ── STAGE ───────────────────────────────────────────────────────────────── */
-.stage{background:var(--card);border:1px solid var(--gb);border-radius:var(--radius);overflow:hidden}
-.stage-grid{display:grid;grid-template-columns:155px 1fr}
+/* ── STAGE ─────────────────────────────────────────────────────────────── */
+.stage{background:var(--card);border:1px solid var(--gb);border-radius:var(--r);overflow:hidden}
+.stage-grid{display:grid;grid-template-columns:150px 1fr}
 .stage-photo{position:relative;overflow:hidden;background:var(--bg4)}
-.stage-photo img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;min-height:185px}
-.stage-pos{position:absolute;bottom:0.5rem;left:0.5rem;background:var(--green);color:#000;padding:0.18rem 0.55rem;font-weight:900;font-size:0.82rem;letter-spacing:0.1em;border-radius:3px}
-.stage-body{padding:1.1rem 1.3rem;display:flex;flex-direction:column;justify-content:space-between}
-.stage-name{font-size:2rem;font-weight:900;line-height:1;letter-spacing:0.03em;margin-bottom:0.2rem}
-.stage-meta{font-family:var(--ffm);font-size:0.62rem;color:var(--td);margin-bottom:0.8rem}
-.bid-row{display:flex;align-items:flex-end;gap:1.2rem}
-.bid-block label{font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);display:block;margin-bottom:0.15rem}
-.bid-val{font-size:2.6rem;font-weight:900;color:var(--green);line-height:1}
-.bid-val.flash{animation:bidBump 0.4s ease}
-@keyframes bidBump{0%{transform:scale(1)}35%{transform:scale(1.1);color:#fff;filter:drop-shadow(0 0 8px var(--green))}100%{transform:scale(1);color:var(--green)}}
-.bid-val.undo-flash{animation:undoBump 0.4s ease}
-@keyframes undoBump{0%{transform:scale(1)}35%{transform:scale(1.05);color:var(--yellow)}100%{transform:scale(1);color:var(--green)}}
-.leader-chip{display:inline-flex;align-items:center;gap:0.4rem;padding:0.28rem 0.8rem;border-radius:4px;font-size:0.95rem;font-weight:700;color:#000;letter-spacing:0.04em}
-.leader-chip img{width:18px;height:18px;object-fit:contain;border-radius:2px}
-.stage-idle{padding:2.5rem;text-align:center;color:var(--td);font-size:1.05rem;font-style:italic}
-.next-bid-bar{background:var(--bg4);border-top:1px solid var(--border);padding:0.6rem 1.1rem;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap}
-.nbb-label{font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--td)}
-.nbb-val{font-family:var(--ffm);font-size:0.88rem;color:var(--green);font-weight:500}
-.nbb-pill{padding:0.12rem 0.55rem;border-radius:10px;background:var(--gd);border:1px solid var(--gb);color:var(--green);font-family:var(--ffm);font-size:0.62rem}
-.nbb-note{margin-left:auto;font-family:var(--ffm);font-size:0.58rem;color:var(--tm)}
-.base-price-badge{padding:0.15rem 0.6rem;border-radius:4px;background:rgba(255,193,7,0.1);border:1px solid rgba(255,193,7,0.25);color:var(--yellow);font-family:var(--ffm);font-size:0.62rem;margin-left:auto}
+.stage-photo img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;min-height:180px}
+.stage-pos{position:absolute;bottom:0.5rem;left:0.5rem;background:var(--green);color:#000;padding:0.16rem 0.5rem;font-weight:900;font-size:0.8rem;letter-spacing:0.1em;border-radius:3px}
+.stage-body{padding:1rem 1.2rem;display:flex;flex-direction:column;justify-content:space-between}
+.stage-name{font-size:1.9rem;font-weight:900;line-height:1;letter-spacing:0.03em;margin-bottom:0.2rem}
+.stage-meta{font-family:var(--ffm);font-size:0.6rem;color:var(--td);margin-bottom:0.7rem}
+.bid-row{display:flex;align-items:flex-end;gap:1.1rem;flex-wrap:wrap}
+.bid-block label{font-family:var(--ffm);font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);display:block;margin-bottom:0.12rem}
+.bid-val{font-size:2.5rem;font-weight:900;color:var(--green);line-height:1}
+.bid-val.flash{animation:bFlash 0.4s ease}
+@keyframes bFlash{0%{transform:scale(1)}35%{transform:scale(1.1);color:#fff;filter:drop-shadow(0 0 8px var(--green))}100%{transform:scale(1);color:var(--green)}}
+.bid-val.undo-f{animation:uFlash 0.4s ease}
+@keyframes uFlash{35%{color:var(--yellow)}}
+.lchip{display:inline-flex;align-items:center;gap:0.4rem;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.9rem;font-weight:700;color:#000;letter-spacing:0.04em}
+.lchip img{width:17px;height:17px;object-fit:contain;border-radius:2px}
+.stage-idle{padding:2.5rem;text-align:center;color:var(--td);font-size:1rem;font-style:italic}
+.nbb{background:var(--bg4);border-top:1px solid var(--border);padding:0.55rem 1rem;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap}
+.nbb-lbl{font-family:var(--ffm);font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--td)}
+.nbb-val{font-family:var(--ffm);font-size:0.85rem;color:var(--green);font-weight:500}
+.nbb-pill{padding:0.1rem 0.5rem;border-radius:10px;background:var(--gd);border:1px solid var(--gb);color:var(--green);font-family:var(--ffm);font-size:0.6rem}
+.nbb-base{padding:0.12rem 0.55rem;border-radius:4px;background:rgba(255,193,7,0.1);border:1px solid rgba(255,193,7,0.2);color:var(--yellow);font-family:var(--ffm);font-size:0.6rem;margin-left:auto}
+.nbb-note{font-family:var(--ffm);font-size:0.56rem;color:var(--tm)}
 
-/* ── BID CONTROLS ────────────────────────────────────────────────────────── */
-.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.55rem}
-.trb{
-  display:flex;align-items:center;gap:0.65rem;
-  padding:0.75rem 0.9rem;background:var(--bg3);
-  border:2px solid var(--border);border-radius:var(--radius);
-  cursor:pointer;transition:all 0.15s;
-}
-.trb:hover:not(:disabled){background:var(--bg4);border-color:var(--green)}
-.trb:active:not(:disabled){transform:scale(0.97)}
-.trb:disabled{opacity:0.3;cursor:not-allowed}
-.trb-logo{width:30px;height:30px;object-fit:contain;border-radius:3px;flex-shrink:0;background:var(--bg4)}
-.trb-info{flex:1;text-align:left;min-width:0}
-.trb-name{font-size:1.05rem;font-weight:800;letter-spacing:0.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.trb-meta{font-family:var(--ffm);font-size:0.58rem;color:var(--td);margin-top:0.1rem}
-.trb-warn{font-family:var(--ffm);font-size:0.56rem;color:var(--yellow);margin-top:0.1rem}
-.trb-right{text-align:right;flex-shrink:0}
-.trb-raise-lbl{font-family:var(--ffm);font-size:0.56rem;color:var(--td);text-transform:uppercase;letter-spacing:0.06em}
-.trb-raise-val{font-size:1.05rem;font-weight:900}
-
-/* Manual bid */
-.manual-wrap{background:var(--bg3);border-radius:var(--radius);padding:0.9rem;display:flex;flex-direction:column;gap:0.6rem}
-.manual-title{font-family:var(--ffm);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--td)}
-.manual-row{display:flex;gap:0.5rem}
-.sel,input.inp{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.95rem;padding:0.55rem 0.7rem;outline:none;border-radius:var(--radius);transition:border-color 0.15s}
-.sel:focus,input.inp:focus{border-color:var(--gb)}
-.sel option{background:var(--bg3)}
-.inp-team{flex:0 0 155px}
-.inp-amt{flex:1;font-family:var(--ffm)}
-.inp-amt::placeholder{color:var(--tm)}
-
-/* Buttons */
-.btn{padding:0.6rem 1rem;border:none;font-family:var(--ff);font-size:0.95rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all 0.15s;display:inline-flex;align-items:center;gap:0.35rem;white-space:nowrap}
-.btn:disabled{opacity:0.3;cursor:not-allowed}
+/* ── BUTTONS ─────────────────────────────────────────────────────────────── */
+.btn{padding:0.55rem 0.95rem;border:none;font-family:var(--ff);font-size:0.92rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all 0.15s;display:inline-flex;align-items:center;gap:0.35rem;white-space:nowrap}
+.btn:disabled{opacity:0.28;cursor:not-allowed}
 .btn-green{background:var(--green);color:#000}.btn-green:hover:not(:disabled){background:#33ffaa;box-shadow:0 0 16px var(--glow)}
 .btn-red{background:var(--red);color:#fff}.btn-red:hover:not(:disabled){background:#ff6b7a}
 .btn-yellow{background:var(--yellow);color:#000}.btn-yellow:hover:not(:disabled){background:#ffd54f}
 .btn-blue{background:var(--blue);color:#000}.btn-blue:hover:not(:disabled){background:#80d8ff}
 .btn-ghost{background:transparent;color:var(--td);border:1px solid var(--border)}.btn-ghost:hover:not(:disabled){border-color:var(--td);color:var(--text)}
-.btn-sm{padding:0.3rem 0.7rem;font-size:0.8rem}
-.btn-undo{background:rgba(255,193,7,0.12);color:var(--yellow);border:1px solid rgba(255,193,7,0.25)}.btn-undo:hover:not(:disabled){background:rgba(255,193,7,0.22);box-shadow:0 0 12px rgba(255,193,7,0.3)}
-.btn-danger{background:var(--rd);color:var(--red);border:1px solid rgba(255,71,87,0.3)}.btn-danger:hover:not(:disabled){background:rgba(255,71,87,0.2)}
+.btn-undo{background:rgba(255,193,7,0.1);color:var(--yellow);border:1px solid rgba(255,193,7,0.25)}.btn-undo:hover:not(:disabled){background:rgba(255,193,7,0.2)}
+.btn-danger{background:var(--rd);color:var(--red);border:1px solid rgba(255,71,87,0.3)}.btn-danger:hover:not(:disabled){background:rgba(255,71,87,0.18)}
+.btn-sm{padding:0.28rem 0.65rem;font-size:0.78rem}
 
-.hammer-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.6rem}
-.hammer-row .btn{justify-content:center}
+/* ── BID CONTROLS ─────────────────────────────────────────────────────── */
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
+.trb{
+  display:flex;align-items:center;gap:0.6rem;padding:0.7rem 0.85rem;
+  background:var(--bg3);border:2px solid var(--border);border-radius:var(--r);
+  cursor:pointer;transition:all 0.15s;
+}
+.trb:hover:not(:disabled){background:var(--bg4);border-color:var(--green)}
+.trb:active:not(:disabled){transform:scale(0.97)}
+.trb:disabled{opacity:0.28;cursor:not-allowed}
+.trb-logo{width:28px;height:28px;object-fit:contain;border-radius:3px;flex-shrink:0;background:var(--bg4)}
+.trb-info{flex:1;text-align:left;min-width:0}
+.trb-name{font-size:1rem;font-weight:800;letter-spacing:0.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trb-meta{font-family:var(--ffm);font-size:0.56rem;color:var(--td);margin-top:0.1rem}
+.trb-warn{font-family:var(--ffm);font-size:0.54rem;color:var(--yellow);margin-top:0.1rem}
+.trb-r{text-align:right;flex-shrink:0}
+.trb-rl{font-family:var(--ffm);font-size:0.54rem;color:var(--td);text-transform:uppercase;letter-spacing:0.06em}
+.trb-rv{font-size:1rem;font-weight:900}
+.manual-wrap{background:var(--bg3);border-radius:var(--r);padding:0.85rem;display:flex;flex-direction:column;gap:0.55rem}
+.manual-title{font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--td)}
+.manual-row{display:flex;gap:0.45rem}
+.sel,.inp{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.92rem;padding:0.52rem 0.65rem;outline:none;border-radius:var(--r);transition:border-color 0.15s}
+.sel:focus,.inp:focus{border-color:var(--gb)}
+.sel option{background:var(--bg3)}
+.inp-team{flex:0 0 150px}
+.inp-amt{flex:1;font-family:var(--ffm)}
+.inp-amt::placeholder{color:var(--tm)}
+.hammer-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.55rem}
+.hammer-row .btn{justify-content:center;padding:0.8rem 0.4rem;font-size:0.88rem}
+.bid-err{font-family:var(--ffm);font-size:0.66rem;color:var(--red);min-height:1em}
 
-.bid-err{font-family:var(--ffm);font-size:0.68rem;color:var(--red);min-height:1em}
+/* ── BID LOG ─────────────────────────────────────────────────────────────── */
+.bid-log{display:flex;flex-direction:column;gap:0.32rem;max-height:205px;overflow-y:auto}
+.bl{display:flex;align-items:center;gap:0.55rem;padding:0.4rem 0.62rem;background:var(--bg3);border-radius:3px;border-left:3px solid}
+.bl img{width:15px;height:15px;object-fit:contain;border-radius:2px;flex-shrink:0}
+.bl-team{font-weight:700;flex:1;font-size:0.92rem}
+.bl-amt{font-family:var(--ffm);font-size:0.78rem;color:var(--green)}
+.bl-time{font-family:var(--ffm);font-size:0.56rem;color:var(--tm)}
 
-/* Bid log */
-.bid-log{display:flex;flex-direction:column;gap:0.35rem;max-height:210px;overflow-y:auto}
-.bl{display:flex;align-items:center;gap:0.6rem;padding:0.42rem 0.65rem;background:var(--bg3);border-radius:3px;border-left:3px solid}
-.bl img{width:16px;height:16px;object-fit:contain;border-radius:2px;flex-shrink:0}
-.bl-team{font-weight:700;flex:1;font-size:0.95rem}
-.bl-amt{font-family:var(--ffm);font-size:0.8rem;color:var(--green)}
-.bl-time{font-family:var(--ffm);font-size:0.58rem;color:var(--tm)}
-.bl-undo{font-family:var(--ffm);font-size:0.58rem;color:var(--yellow);font-style:italic}
-
-/* Players table */
-.ptable{width:100%;border-collapse:collapse;font-size:0.88rem}
-.ptable th{font-family:var(--ffm);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);padding:0.42rem 0.65rem;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.ptable td{padding:0.38rem 0.65rem;border-bottom:1px solid rgba(37,37,69,0.5);vertical-align:middle}
+/* ── PLAYERS TABLE ─────────────────────────────────────────────────────── */
+.ptable{width:100%;border-collapse:collapse;font-size:0.86rem}
+.ptable th{font-family:var(--ffm);font-size:0.54rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);padding:0.4rem 0.62rem;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.ptable td{padding:0.36rem 0.62rem;border-bottom:1px solid rgba(37,37,69,0.5);vertical-align:middle}
 .ptable tr:hover td{background:rgba(24,24,48,0.7)}
-.ptable tr.sold td{opacity:0.38}
+.ptable tr.sold td{opacity:0.35}
 .ptable tr.live td{background:rgba(0,230,118,0.05)!important}
 .ptable tr.unsold td{opacity:0.5}
-.pphoto{width:32px;height:32px;object-fit:cover;object-position:top;border-radius:4px;background:var(--bg4);display:block}
-.pos-tag{display:inline-block;padding:0.1rem 0.38rem;background:var(--bg4);border-radius:3px;font-family:var(--ffm);font-size:0.58rem;color:var(--td)}
-.stat-tag{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.05em;text-transform:uppercase}
-.st-a{background:var(--gd);color:var(--green);border:1px solid var(--gb)}
-.st-l{background:var(--gd);color:var(--green);border:1px solid var(--green);animation:glowPulse 1s infinite}
-.st-s{background:rgba(255,193,7,0.1);color:var(--yellow);border:1px solid rgba(255,193,7,0.2)}
-.st-u{background:var(--rd);color:var(--red);border:1px solid rgba(255,71,87,0.2)}
-.act-btns{display:flex;gap:0.3rem;align-items:center}
-.start-btn{padding:0.26rem 0.62rem;background:var(--green);color:#000;border:none;font-family:var(--ff);font-size:0.8rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;border-radius:3px;transition:all 0.15s}
-.start-btn:hover{background:#33ffaa}
-.start-btn:disabled{opacity:0.3;cursor:not-allowed}
-.ic-btn{padding:0.26rem 0.48rem;background:transparent;border:1px solid var(--border);color:var(--td);font-size:0.72rem;cursor:pointer;border-radius:3px;transition:all 0.15s}
-.ic-btn:hover.del{border-color:var(--red);color:var(--red)}
-.ic-btn:hover.edit{border-color:var(--blue);color:var(--blue)}
-.ic-btn:hover.rst{border-color:var(--yellow);color:var(--yellow)}
-.tfilter{display:flex;gap:0.35rem;flex-wrap:wrap}
-.tf{padding:0.22rem 0.55rem;background:transparent;border:1px solid var(--border);color:var(--td);font-family:var(--ffm);font-size:0.6rem;cursor:pointer;border-radius:3px;transition:all 0.15s}
+.pphoto{width:30px;height:30px;object-fit:cover;object-position:top;border-radius:4px;background:var(--bg4);display:block}
+.pos-tag{display:inline-block;padding:0.08rem 0.35rem;background:var(--bg4);border-radius:3px;font-family:var(--ffm);font-size:0.56rem;color:var(--td)}
+.stag{display:inline-block;padding:0.1rem 0.42rem;border-radius:3px;font-family:var(--ffm);font-size:0.56rem;letter-spacing:0.05em;text-transform:uppercase}
+.sa{background:var(--gd);color:var(--green);border:1px solid var(--gb)}
+.sl{background:var(--gd);color:var(--green);border:1px solid var(--green);animation:glow 1s infinite}
+.ss{background:rgba(255,193,7,0.1);color:var(--yellow);border:1px solid rgba(255,193,7,0.2)}
+.su{background:var(--rd);color:var(--red);border:1px solid rgba(255,71,87,0.2)}
+.act-row{display:flex;gap:0.28rem;align-items:center}
+.stbtn{padding:0.24rem 0.58rem;background:var(--green);color:#000;border:none;font-family:var(--ff);font-size:0.78rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;border-radius:3px;transition:all 0.15s}
+.stbtn:hover{background:#33ffaa}
+.stbtn:disabled{opacity:0.28;cursor:not-allowed}
+.icbtn{padding:0.24rem 0.45rem;background:transparent;border:1px solid var(--border);color:var(--td);font-size:0.7rem;cursor:pointer;border-radius:3px;transition:all 0.15s}
+.icbtn:hover.del{border-color:var(--red);color:var(--red)}
+.icbtn:hover.ed{border-color:var(--blue);color:var(--blue)}
+.icbtn:hover.rst{border-color:var(--yellow);color:var(--yellow)}
+.tf{padding:0.2rem 0.52rem;background:transparent;border:1px solid var(--border);color:var(--td);font-family:var(--ffm);font-size:0.58rem;cursor:pointer;border-radius:3px;transition:all 0.15s}
 .tf.active{border-color:var(--gb);color:var(--green);background:var(--gd)}
 .tf:hover{border-color:var(--td);color:var(--text)}
-.psearch{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.85rem;padding:0.3rem 0.65rem;outline:none;border-radius:3px;width:165px}
-.psearch:focus{border-color:var(--gb)}
+.psrch{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.82rem;padding:0.28rem 0.62rem;outline:none;border-radius:3px;width:155px}
+.psrch:focus{border-color:var(--gb)}
 
-/* Add/edit form */
-.aform{display:grid;grid-template-columns:1fr 1fr;gap:0.55rem}
+/* ── PLAYER FORM ─────────────────────────────────────────────────────────── */
+.aform{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
 .aform .full{grid-column:1/-1}
-.fl{font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--td);display:block;margin-bottom:0.2rem}
-.fi,.fsel{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.92rem;padding:0.45rem 0.65rem;outline:none;border-radius:var(--radius);transition:border-color 0.15s}
+.fl{font-family:var(--ffm);font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--td);display:block;margin-bottom:0.18rem}
+.fi,.fsel{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.9rem;padding:0.42rem 0.62rem;outline:none;border-radius:var(--r);transition:border-color 0.15s}
 .fi:focus,.fsel:focus{border-color:var(--gb)}
 .fsel option{background:var(--bg3)}
+/* URL + preview row */
+.url-row{display:flex;gap:0.5rem;align-items:center}
+.url-preview{width:44px;height:44px;border-radius:var(--r);object-fit:cover;object-position:top;background:var(--bg4);border:1px solid var(--border);flex-shrink:0}
 
-/* Photo upload */
-.photo-upload-wrap{display:flex;align-items:center;gap:0.7rem}
-.photo-preview{width:52px;height:52px;border-radius:var(--radius);object-fit:cover;background:var(--bg4);border:1px solid var(--border);flex-shrink:0}
-.upload-area{flex:1;cursor:pointer;position:relative}
-.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-label{
-  display:flex;align-items:center;justify-content:center;gap:0.5rem;
-  padding:0.6rem 0.8rem;background:var(--bg);border:1.5px dashed var(--border);
-  border-radius:var(--radius);color:var(--td);font-family:var(--ffi);font-size:0.8rem;
-  transition:all 0.15s;cursor:pointer;
-}
-.upload-area:hover .upload-label{border-color:var(--gb);color:var(--green);background:var(--gd)}
-.upload-spinner{display:none;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Team cards */
-.team-card{background:var(--bg3);border-radius:var(--radius);padding:0.9rem 1rem;border-left:4px solid;margin-bottom:0.7rem;transition:border-color 0.2s}
-.team-card:last-child{margin-bottom:0}
-.tc-row1{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.55rem}
-.tc-logo{width:42px;height:42px;object-fit:contain;border-radius:var(--radius);background:var(--bg4);flex-shrink:0;padding:2px}
-.tc-name{font-size:1.05rem;font-weight:800;letter-spacing:0.04em;line-height:1}
-.tc-nums{font-family:var(--ffm);font-size:0.6rem;color:var(--td);margin-top:0.2rem}
+/* ── TEAMS ─────────────────────────────────────────────────────────────── */
+.tc{background:var(--bg3);border-radius:var(--r);padding:0.85rem 0.95rem;border-left:4px solid;margin-bottom:0.6rem}
+.tc:last-child{margin-bottom:0}
+.tc-r1{display:flex;align-items:center;gap:0.7rem;margin-bottom:0.5rem}
+.tc-logo{width:38px;height:38px;object-fit:contain;border-radius:var(--r);background:var(--bg4);flex-shrink:0;padding:2px}
+.tc-name{font-size:1rem;font-weight:800;letter-spacing:0.04em;line-height:1}
+.tc-nums{font-family:var(--ffm);font-size:0.58rem;color:var(--td);margin-top:0.2rem}
 .tc-nums span{color:var(--text)}
-.tc-maxbid{font-family:var(--ffm);font-size:0.6rem;color:var(--td)}
-.tc-maxbid span{color:var(--yellow)}
+.tc-maxb{font-family:var(--ffm);font-size:0.58rem;color:var(--td)}
+.tc-maxb span{color:var(--yellow)}
 .tc-acts{display:flex;gap:0.3rem;margin-left:auto}
-.tc-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:0.5rem}
-.tc-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
-.tc-chips{display:flex;flex-wrap:wrap;gap:0.28rem}
-.tc-chip{padding:0.12rem 0.42rem;background:rgba(0,0,0,0.3);border-radius:3px;font-size:0.75rem;color:var(--td)}
+.tc-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:0.45rem}
+.tc-fill{height:100%;border-radius:2px;transition:width 0.5s}
+.tc-chips{display:flex;flex-wrap:wrap;gap:0.25rem}
+.tc-chip{padding:0.1rem 0.4rem;background:rgba(0,0,0,0.3);border-radius:2px;font-size:0.72rem;color:var(--td)}
 
-/* Sold list */
-.si{display:flex;align-items:center;gap:0.6rem;padding:0.38rem 0;border-bottom:1px solid var(--border)}
+/* ── SOLD ─────────────────────────────────────────────────────────────── */
+.si{display:flex;align-items:center;gap:0.55rem;padding:0.35rem 0;border-bottom:1px solid var(--border)}
 .si:last-child{border-bottom:none}
-.si img.photo{width:28px;height:28px;border-radius:3px;object-fit:cover;flex-shrink:0;background:var(--bg4)}
-.si-name{font-size:0.95rem;font-weight:700;flex:1;font-family:var(--ff)}
-.si-pos{font-family:var(--ffm);font-size:0.58rem;color:var(--td)}
-.si-price{font-family:var(--ffm);font-size:0.75rem;color:var(--green)}
-.si-team{font-size:0.82rem;font-weight:700}
-.si-tlogo{width:16px;height:16px;object-fit:contain;border-radius:2px;flex-shrink:0}
+.si img.ph{width:26px;height:26px;border-radius:3px;object-fit:cover;flex-shrink:0;background:var(--bg4)}
+.si-name{font-size:0.9rem;font-weight:700;flex:1;font-family:var(--ff)}
+.si-pos{font-family:var(--ffm);font-size:0.56rem;color:var(--td)}
+.si-price{font-family:var(--ffm);font-size:0.72rem;color:var(--green)}
+.si-team{font-size:0.78rem;font-weight:700}
+.si-tl{width:15px;height:15px;object-fit:contain;border-radius:2px;flex-shrink:0}
 
-/* Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
-.modal-bg.open{display:flex}
-.modal{background:var(--card);border:1px solid var(--gb);padding:1.8rem;width:100%;max-width:460px;position:relative;border-radius:10px;box-shadow:0 20px 80px rgba(0,0,0,0.7)}
-.modal h3{font-size:1.4rem;font-weight:800;margin-bottom:1.1rem;color:var(--green)}
-.modal-x{position:absolute;top:1rem;right:1rem;background:transparent;border:1px solid var(--border);color:var(--td);width:28px;height:28px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:4px}
+/* ── MODAL ─────────────────────────────────────────────────────────────── */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(14px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.mbg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--gb);padding:1.7rem;width:100%;max-width:440px;position:relative;border-radius:10px;box-shadow:0 24px 80px rgba(0,0,0,0.7)}
+.modal h3{font-size:1.35rem;font-weight:800;margin-bottom:1rem;color:var(--green)}
+.modal-x{position:absolute;top:0.9rem;right:0.9rem;background:transparent;border:1px solid var(--border);color:var(--td);width:27px;height:27px;cursor:pointer;font-size:0.95rem;display:flex;align-items:center;justify-content:center;border-radius:4px}
 .modal-x:hover{border-color:var(--red);color:var(--red)}
-
-/* Settings form */
-.sf{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.sf{display:grid;grid-template-columns:1fr 1fr;gap:0.55rem}
 .sf .full{grid-column:1/-1}
-.inc-preview{background:var(--bg3);border-radius:4px;padding:0.5rem 0.7rem;font-family:var(--ffm);font-size:0.68rem;color:var(--td);margin-top:0.4rem;grid-column:1/-1}
-.inc-preview span{color:var(--green)}
+.inc-prev{background:var(--bg3);border-radius:4px;padding:0.45rem 0.65rem;font-family:var(--ffm);font-size:0.65rem;color:var(--td);margin-top:0.3rem;grid-column:1/-1}
+.inc-prev span{color:var(--green)}
 
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:var(--td)}
 </style>
 </head>
 <body>
 
-<!-- PASSWORD LOGIN -->
+<!-- PASSWORD SCREEN -->
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="login-icon">🔐</div>
-    <div class="login-title">ADMIN</div>
-    <div class="login-sub">PPL Season 7 · Control Panel</div>
-    <input class="pw-input" id="pwInput" type="password" placeholder="Enter password" autocomplete="current-password"/>
+  <div class="lc">
+    <div class="lc-icon">🔐</div>
+    <div class="lc-title">ADMIN</div>
+    <div class="lc-sub">PPL Auction · Control Panel</div>
+    <input class="pw-in" id="pwIn" type="password" placeholder="Enter password" autocomplete="off"/>
     <button class="pw-btn" onclick="doLogin()">Unlock →</button>
     <div class="pw-err" id="pwErr"></div>
   </div>
@@ -279,29 +244,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 <!-- ADMIN APP -->
 <div id="adminApp">
 <div class="topbar">
-  <div class="topbar-left">
-    <img id="tLogo" class="t-logo" src="" alt="" style="display:none"/>
-    <div class="t-title">PPL <span id="tSeason">S7</span> — Admin</div>
-    <div class="phase-pill pi" id="phasePill">IDLE</div>
+  <div class="tb-l">
+    <img class="tb-logo" id="tbLogo" src="" alt="" style="display:none"/>
+    <div class="tb-title">PPL <span id="tbSeason">S7</span></div>
+    <div class="phase-pill pp-idle" id="phasePill">IDLE</div>
   </div>
-  <div class="topbar-right">
+  <div class="tb-r">
     <button class="btn btn-ghost btn-sm" onclick="openSettings()">⚙ Settings</button>
     <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑 Reset All</button>
   </div>
 </div>
 <div class="links">
-  <span>Open on other screens →</span>
+  <span>Open on screens →</span>
   <a href="/projector.html" target="_blank">🖥 Projector</a>
   <a href="/manager.html" target="_blank">👤 Manager</a>
 </div>
 
 <div class="layout">
-<!-- LEFT -->
 <div class="col">
 
   <!-- STAGE -->
   <div class="stage" id="stage">
-    <div class="stage-idle" id="stageIdle">⚽ Select a player below to begin the auction</div>
+    <div class="stage-idle" id="stageIdle">⚽ Select a player below to begin</div>
     <div class="stage-grid" id="stageContent" style="display:none">
       <div class="stage-photo">
         <img id="sPhoto" src="" alt=""/>
@@ -315,20 +279,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
         <div class="bid-row">
           <div class="bid-block">
             <label>Current Bid</label>
-            <div class="bid-val" id="sBidVal">₹0</div>
+            <div class="bid-val" id="sBid">₹0</div>
           </div>
-          <div class="bid-block" style="margin-left:1rem">
+          <div class="bid-block" style="margin-left:0.8rem">
             <label>Leading</label>
-            <div class="leader-chip" id="sLeader" style="background:#2a2a40;color:#666">— No bid yet —</div>
+            <div class="lchip" id="sLeader" style="background:#2a2a40;color:#555">— No bid —</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="next-bid-bar" id="nextBidBar" style="display:none">
-      <span class="nbb-label">Next bid</span>
+    <div class="nbb" id="nextBidBar" style="display:none">
+      <span class="nbb-lbl">NEXT BID</span>
       <span class="nbb-val" id="nbbVal"></span>
       <span class="nbb-pill" id="nbbPill"></span>
-      <span class="base-price-badge" id="nbbBase"></span>
+      <span class="nbb-base" id="nbbBase"></span>
       <span class="nbb-note" id="nbbNote"></span>
     </div>
   </div>
@@ -336,54 +300,44 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
   <!-- BID CONTROLS -->
   <div class="panel">
     <div class="ph">
-      <span class="pt">Bid Controls</span>
+      <span class="pt">Bid Controls — click team when they raise paddle</span>
       <span class="bid-err" id="bidErr"></span>
     </div>
-    <div class="pb" style="display:flex;flex-direction:column;gap:0.9rem">
+    <div class="pb" style="display:flex;flex-direction:column;gap:0.85rem">
 
-      <!-- Team raise buttons -->
-      <div>
-        <div style="font-family:var(--ffm);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--tm);margin-bottom:0.5rem">Click team's button when they raise paddle ↓</div>
-        <div class="team-grid" id="teamGrid"></div>
-      </div>
+      <div class="team-grid" id="teamGrid"></div>
 
-      <!-- Manual bid -->
       <div class="manual-wrap">
-        <div class="manual-title">Manual Entry — type any amount (min: base price)</div>
+        <div class="manual-title">Manual entry — type any amount (min = base price)</div>
         <div class="manual-row">
           <select class="sel inp-team" id="manualTeam"></select>
-          <input class="inp inp-amt" id="manualAmt" type="number" placeholder="₹ amount" min="1"/>
-          <button class="btn btn-blue" onclick="placeManualBid()">Place</button>
+          <input class="inp inp-amt" id="manualAmt" type="number" placeholder="₹ amount"/>
+          <button class="btn btn-blue" onclick="placeManual()">Place</button>
         </div>
       </div>
 
-      <!-- Hammer + Undo -->
       <div class="hammer-row">
         <button class="btn btn-green" id="btnSold"   onclick="doSold()"   disabled>🔨 SOLD!</button>
         <button class="btn btn-red"   id="btnUnsold" onclick="doUnsold()" disabled>✗ UNSOLD</button>
-        <button class="btn btn-undo"  id="btnUndo"   onclick="doUndo()"   disabled>↩ UNDO BID</button>
+        <button class="btn btn-undo"  id="btnUndo"   onclick="doUndo()"   disabled>↩ UNDO</button>
         <button class="btn btn-ghost" onclick="doIdle()">↺ Reset</button>
       </div>
-
     </div>
   </div>
 
   <!-- BID LOG -->
   <div class="panel">
-    <div class="ph">
-      <span class="pt">Bid Log</span>
-      <span id="bidLogCount" style="font-family:var(--ffm);font-size:0.62rem;color:var(--tm)"></span>
-    </div>
-    <div class="pb"><div class="bid-log" id="bidLog"><div style="color:var(--tm);font-style:italic;font-size:0.88rem">No bids yet</div></div></div>
+    <div class="ph"><span class="pt">Bid Log</span><span id="blCount" style="font-family:var(--ffm);font-size:0.6rem;color:var(--tm)"></span></div>
+    <div class="pb"><div class="bid-log" id="bidLog"><div style="color:var(--tm);font-style:italic;font-size:0.85rem">No bids yet</div></div></div>
   </div>
 
   <!-- PLAYERS -->
   <div class="panel">
-    <div class="ph" style="flex-wrap:wrap;gap:0.5rem">
+    <div class="ph" style="flex-wrap:wrap;gap:0.45rem">
       <span class="pt">Player Pool</span>
-      <input class="psearch" id="pSearch" placeholder="Search…" oninput="renderPlayers()"/>
-      <div class="tfilter" id="posFilter"></div>
-      <span id="pCount" style="font-family:var(--ffm);font-size:0.6rem;color:var(--tm);width:100%"></span>
+      <input class="psrch" id="pSrch" placeholder="Search…" oninput="renderPlayers()"/>
+      <div style="display:flex;gap:0.3rem;flex-wrap:wrap" id="posFilter"></div>
+      <span id="pCount" style="font-family:var(--ffm);font-size:0.58rem;color:var(--tm);width:100%"></span>
     </div>
     <div style="overflow-x:auto">
       <table class="ptable">
@@ -393,9 +347,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
     </div>
   </div>
 
-  <!-- ADD PLAYER FORM -->
+  <!-- ADD PLAYER -->
   <div class="panel">
-    <div class="ph"><span class="pt" id="addFormTitle">Add New Player</span></div>
+    <div class="ph"><span class="pt">Add New Player</span></div>
     <div class="pb">
       <div class="aform">
         <div><label class="fl">Full Name *</label><input class="fi" id="pName" placeholder="Player name"/></div>
@@ -408,69 +362,51 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
         <div><label class="fl">Rating (1–99)</label><input class="fi" id="pRating" type="number" min="1" max="99" placeholder="80"/></div>
         <div><label class="fl">Base Price (₹) *</label><input class="fi" id="pBase" type="number" placeholder="100" min="1"/></div>
         <div class="full">
-          <label class="fl">Player Photo</label>
-          <div class="photo-upload-wrap">
-            <img class="photo-preview" id="pPhotoPreview" src="https://ui-avatars.com/api/?name=Player&background=0d1117&color=00e87a&size=80" alt=""/>
-            <div class="upload-area">
-              <input class="upload-input" id="pPhotoFile" type="file" accept="image/*" onchange="handlePhotoUpload('pPhotoFile','pPhotoPreview','pPhotoUrl')"/>
-              <div class="upload-label">📷 Upload photo from device <div class="upload-spinner" id="pPhotoSpinner"></div></div>
-            </div>
+          <label class="fl">Photo URL (paste link — leave blank for auto avatar)</label>
+          <div class="url-row">
+            <img class="url-preview" id="pPhotoPreview" src="" alt=""/>
+            <input class="fi" id="pPhoto" placeholder="https://… direct image link" oninput="previewUrl('pPhoto','pPhotoPreview')"/>
           </div>
-          <input type="hidden" id="pPhotoUrl"/>
         </div>
       </div>
-      <div style="display:flex;gap:0.5rem;margin-top:0.7rem">
-        <button class="btn btn-green" style="flex:1;justify-content:center" onclick="savePlayer()">+ Save Player</button>
-      </div>
+      <button class="btn btn-green" style="margin-top:0.7rem;width:100%;justify-content:center" onclick="savePlayer()">+ Save Player</button>
     </div>
   </div>
 
 </div><!-- /col left -->
 
-<!-- RIGHT -->
+<!-- RIGHT COL -->
 <div class="col">
-
-  <!-- TEAMS -->
   <div class="panel">
-    <div class="ph">
-      <span class="pt">Teams</span>
-      <button class="btn btn-green btn-sm" onclick="openTeamModal(null)">+ Add Team</button>
-    </div>
+    <div class="ph"><span class="pt">Teams</span><button class="btn btn-green btn-sm" onclick="openTeamModal(null)">+ Add Team</button></div>
     <div class="pb" id="teamsPanel"></div>
   </div>
-
-  <!-- SOLD -->
   <div class="panel">
-    <div class="ph"><span class="pt">Sold Players</span><span id="soldMeta" style="font-family:var(--ffm);font-size:0.62rem;color:var(--tm)"></span></div>
-    <div class="pb" id="soldPanel"><div style="color:var(--tm);font-style:italic;font-size:0.88rem">No sales yet</div></div>
+    <div class="ph"><span class="pt">Sold Players</span><span id="soldMeta" style="font-family:var(--ffm);font-size:0.6rem;color:var(--tm)"></span></div>
+    <div class="pb" id="soldPanel"><div style="color:var(--tm);font-style:italic;font-size:0.85rem">No sales yet</div></div>
   </div>
-
 </div>
-</div><!-- /layout -->
+</div>
 </div><!-- /adminApp -->
 
 <!-- TEAM MODAL -->
-<div class="modal-bg" id="teamModal">
+<div class="mbg" id="teamModal">
   <div class="modal">
     <button class="modal-x" onclick="closeModal('teamModal')">✕</button>
     <h3 id="tmTitle">Add Team</h3>
     <input type="hidden" id="tmId"/>
-    <div style="display:flex;flex-direction:column;gap:0.65rem">
+    <div style="display:flex;flex-direction:column;gap:0.6rem">
       <div><label class="fl">Team Name *</label><input class="fi" id="tmName" placeholder="e.g. Thunder FC"/></div>
-      <div style="display:flex;gap:0.7rem">
-        <div style="flex:0 0 90px"><label class="fl">Color</label><input class="fi" id="tmColor" type="color" value="#e63946" style="height:40px;padding:2px 4px;cursor:pointer"/></div>
+      <div style="display:flex;gap:0.65rem">
+        <div style="flex:0 0 85px"><label class="fl">Color</label><input class="fi" id="tmColor" type="color" value="#e63946" style="height:40px;padding:2px 4px;cursor:pointer"/></div>
         <div style="flex:1"><label class="fl">Budget (₹) *</label><input class="fi" id="tmBudget" type="number" placeholder="8000"/></div>
       </div>
       <div>
-        <label class="fl">Team Logo</label>
-        <div class="photo-upload-wrap">
-          <img class="photo-preview" id="tmLogoPreview" src="" alt="" style="background:var(--bg4)"/>
-          <div class="upload-area">
-            <input class="upload-input" id="tmLogoFile" type="file" accept="image/*" onchange="handlePhotoUpload('tmLogoFile','tmLogoPreview','tmLogoUrl')"/>
-            <div class="upload-label">📷 Upload logo <div class="upload-spinner" id="tmLogoSpinner"></div></div>
-          </div>
+        <label class="fl">Team Logo URL</label>
+        <div class="url-row">
+          <img class="url-preview" id="tmLogoPreview" src="" alt="" style="background:var(--bg4)"/>
+          <input class="fi" id="tmLogo" placeholder="https://… logo image URL" oninput="previewUrl('tmLogo','tmLogoPreview')"/>
         </div>
-        <input type="hidden" id="tmLogoUrl"/>
       </div>
       <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.3rem" onclick="saveTeam()">Save Team</button>
     </div>
@@ -478,7 +414,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 </div>
 
 <!-- EDIT PLAYER MODAL -->
-<div class="modal-bg" id="editModal">
+<div class="mbg" id="editModal">
   <div class="modal">
     <button class="modal-x" onclick="closeModal('editModal')">✕</button>
     <h3>Edit Player</h3>
@@ -494,54 +430,43 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
       <div><label class="fl">Rating</label><input class="fi" id="emRating" type="number" min="1" max="99"/></div>
       <div><label class="fl">Base Price (₹)</label><input class="fi" id="emBase" type="number"/></div>
       <div class="full">
-        <label class="fl">Player Photo</label>
-        <div class="photo-upload-wrap">
-          <img class="photo-preview" id="emPhotoPreview" src="" alt=""/>
-          <div class="upload-area">
-            <input class="upload-input" id="emPhotoFile" type="file" accept="image/*" onchange="handlePhotoUpload('emPhotoFile','emPhotoPreview','emPhotoUrl')"/>
-            <div class="upload-label">📷 Upload new photo <div class="upload-spinner" id="emPhotoSpinner"></div></div>
-          </div>
+        <label class="fl">Photo URL</label>
+        <div class="url-row">
+          <img class="url-preview" id="emPhotoPreview" src="" alt=""/>
+          <input class="fi" id="emPhoto" placeholder="https://… or blank for auto avatar" oninput="previewUrl('emPhoto','emPhotoPreview')"/>
         </div>
-        <input type="hidden" id="emPhotoUrl"/>
       </div>
     </div>
-    <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.8rem" onclick="saveEditPlayer()">Save Changes</button>
+    <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.75rem" onclick="saveEditPlayer()">Save Changes</button>
   </div>
 </div>
 
 <!-- SETTINGS MODAL -->
-<div class="modal-bg" id="settingsModal">
-  <div class="modal" style="max-width:500px">
+<div class="mbg" id="settingsModal">
+  <div class="modal" style="max-width:490px">
     <button class="modal-x" onclick="closeModal('settingsModal')">✕</button>
     <h3>⚙ League Settings</h3>
     <div class="sf">
       <div class="full"><label class="fl">League Name</label><input class="fi" id="cfgName"/></div>
       <div class="full"><label class="fl">Season</label><input class="fi" id="cfgSeason"/></div>
       <div class="full">
-        <label class="fl">League Logo</label>
-        <div class="photo-upload-wrap">
-          <img class="photo-preview" id="cfgLogoPreview" src="" alt="" style="background:var(--bg4)"/>
-          <div class="upload-area">
-            <input class="upload-input" id="cfgLogoFile" type="file" accept="image/*" onchange="handlePhotoUpload('cfgLogoFile','cfgLogoPreview','cfgLogoUrl')"/>
-            <div class="upload-label">📷 Upload league logo <div class="upload-spinner" id="cfgLogoSpinner"></div></div>
-          </div>
+        <label class="fl">League Logo URL</label>
+        <div class="url-row">
+          <img class="url-preview" id="cfgLogoPreview" src="" alt="" style="background:var(--bg4)"/>
+          <input class="fi" id="cfgLogo" placeholder="https://… logo URL" oninput="previewUrl('cfgLogo','cfgLogoPreview')"/>
         </div>
-        <input type="hidden" id="cfgLogoUrl"/>
       </div>
-      <div><label class="fl">Min Players per Team</label><input class="fi" id="cfgMin" type="number" min="1"/></div>
+      <div><label class="fl">Min Players / Team</label><input class="fi" id="cfgMin" type="number" min="1"/></div>
       <div></div>
-      <div><label class="fl">Bid threshold (₹)</label><input class="fi" id="cfgThresh" type="number" oninput="updateIncPreview()"/></div>
+      <div><label class="fl">Bid Threshold (₹)</label><input class="fi" id="cfgThresh" type="number" oninput="updateIncPrev()"/></div>
       <div></div>
-      <div><label class="fl">Increment BELOW threshold</label><input class="fi" id="cfgHi" type="number" oninput="updateIncPreview()"/></div>
-      <div><label class="fl">Increment AT/ABOVE threshold</label><input class="fi" id="cfgLo" type="number" oninput="updateIncPreview()"/></div>
-      <div class="inc-preview full" id="incPreview"></div>
-      <div style="grid-column:1/-1;height:1px;background:var(--border);margin:0.3rem 0"></div>
-      <div class="full">
-        <label class="fl">Admin Password</label>
-        <input class="fi" id="cfgPw" type="text" placeholder="Leave blank to keep current"/>
-      </div>
+      <div><label class="fl">Increment BELOW threshold</label><input class="fi" id="cfgHi" type="number" oninput="updateIncPrev()"/></div>
+      <div><label class="fl">Increment AT/ABOVE threshold</label><input class="fi" id="cfgLo" type="number" oninput="updateIncPrev()"/></div>
+      <div class="inc-prev full" id="incPrev"></div>
+      <div style="grid-column:1/-1;height:1px;background:var(--border);margin:0.2rem 0"></div>
+      <div class="full"><label class="fl">Admin Password (blank = keep current)</label><input class="fi" id="cfgPw" type="text" placeholder="Leave blank to keep current"/></div>
     </div>
-    <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.8rem" onclick="saveSettings()">Save Settings</button>
+    <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.75rem" onclick="saveSettings()">Save Settings</button>
   </div>
 </div>
 
@@ -549,48 +474,43 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 const socket = io();
 let S = { auctionState:{phase:'idle',currentBid:0,bidHistory:[],soldPlayers:[]}, teams:[], players:[], config:{} };
 let posFilter = 'ALL';
-let hasUndo = false;
 
 // ── LOGIN ────────────────────────────────────────────────────────────────────
-document.getElementById('pwInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('pwIn').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 function doLogin() {
-  const pw = document.getElementById('pwInput').value;
+  const pw = document.getElementById('pwIn').value;
   socket.emit('admin:verifyPassword', { password: pw }, ({ ok }) => {
     if (ok) {
       document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminApp').style.display = 'block';
-      sessionStorage.setItem('ppl_admin', '1');
+      document.getElementById('adminApp').style.display   = 'block';
+      sessionStorage.setItem('ppl_admin','1');
     } else {
-      document.getElementById('pwErr').textContent = '✕ Incorrect password';
-      document.getElementById('pwInput').value = '';
+      document.getElementById('pwErr').textContent = '✕ Wrong password';
+      document.getElementById('pwIn').value = '';
       setTimeout(() => document.getElementById('pwErr').textContent = '', 2500);
     }
   });
 }
-// Auto-unlock if already authed this session
-if (sessionStorage.getItem('ppl_admin') === '1') {
+if (sessionStorage.getItem('ppl_admin')==='1') {
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('adminApp').style.display = 'block';
+  document.getElementById('adminApp').style.display   = 'block';
 }
 
-// ── SOCKET EVENTS ────────────────────────────────────────────────────────────
-socket.on('stateUpdate', data => { S = data; render(); });
+// ── SOCKET ───────────────────────────────────────────────────────────────────
+socket.on('stateUpdate', data => { S=data; render(); });
 socket.on('bidFlash', () => {
-  const el = document.getElementById('sBidVal');
-  el.classList.remove('flash','undo-flash'); void el.offsetWidth; el.classList.add('flash');
-  hasUndo = true;
+  const el=document.getElementById('sBid');
+  el.classList.remove('flash','undo-f'); void el.offsetWidth; el.classList.add('flash');
   document.getElementById('btnUndo').disabled = false;
 });
 socket.on('bidUndo', () => {
-  const el = document.getElementById('sBidVal');
-  el.classList.remove('flash','undo-flash'); void el.offsetWidth; el.classList.add('undo-flash');
-  hasUndo = false;
+  const el=document.getElementById('sBid');
+  el.classList.remove('flash','undo-f'); void el.offsetWidth; el.classList.add('undo-f');
   document.getElementById('btnUndo').disabled = true;
 });
 socket.on('bidError', ({msg}) => {
-  const el = document.getElementById('bidErr');
-  el.textContent = msg;
-  setTimeout(() => el.textContent = '', 4000);
+  const el=document.getElementById('bidErr');
+  el.textContent=msg; setTimeout(()=>el.textContent='',4500);
 });
 
 // ── RENDER ───────────────────────────────────────────────────────────────────
@@ -604,173 +524,153 @@ function render() {
   renderTeams(as, teams, config);
   renderPlayers();
   renderBidLog(as.bidHistory);
-  renderSoldPanel(as.soldPlayers);
+  renderSold(as.soldPlayers);
   renderPosFilters(players);
 }
 
 function renderPhasePill(phase) {
-  const el = document.getElementById('phasePill');
-  el.className = 'phase-pill p' + phase[0];
-  el.textContent = phase.toUpperCase();
+  const el=document.getElementById('phasePill');
+  el.className='phase-pill pp-'+phase;
+  el.textContent=phase.toUpperCase();
 }
-
 function renderBranding(cfg) {
-  document.getElementById('tSeason').textContent = (cfg.leagueSeason||'S7').replace(/season\s*/i,'S');
-  const logo = document.getElementById('tLogo');
-  if (cfg.leagueLogo) { logo.src=cfg.leagueLogo; logo.style.display='block'; }
-  else logo.style.display='none';
+  document.getElementById('tbSeason').textContent=(cfg.leagueSeason||'S7').replace(/season\s*/i,'S');
+  const l=document.getElementById('tbLogo');
+  if(cfg.leagueLogo){l.src=cfg.leagueLogo;l.style.display='block';}else l.style.display='none';
 }
 
-function renderStage(as, config) {
-  const { phase, currentPlayer:p, currentBid, leadingTeam } = as;
-  const idle    = document.getElementById('stageIdle');
-  const content = document.getElementById('stageContent');
-  const nbb     = document.getElementById('nextBidBar');
-  const btnSold   = document.getElementById('btnSold');
-  const btnUnsold = document.getElementById('btnUnsold');
-
-  if (!p || phase === 'idle') {
-    idle.style.display=''; content.style.display='none'; nbb.style.display='none';
-    btnSold.disabled=true; btnUnsold.disabled=true; return;
+function renderStage(as, cfg) {
+  const {phase,currentPlayer:p,currentBid,leadingTeam}=as;
+  const idle=document.getElementById('stageIdle');
+  const content=document.getElementById('stageContent');
+  const nbb=document.getElementById('nextBidBar');
+  const bS=document.getElementById('btnSold');
+  const bU=document.getElementById('btnUnsold');
+  if(!p||phase==='idle'){
+    idle.style.display='';content.style.display='none';nbb.style.display='none';
+    bS.disabled=true;bU.disabled=true;return;
   }
-  idle.style.display='none'; content.style.display=''; nbb.style.display='flex';
-  document.getElementById('sPhoto').src    = p.photo;
-  document.getElementById('sPos').textContent = p.position;
-  document.getElementById('sName').textContent = p.name;
-  document.getElementById('sMeta').textContent = `Rating: ${p.rating}  ·  Base: ₹${p.basePrice}  ·  ID #${p.id}`;
-  document.getElementById('sBidVal').textContent = `₹${currentBid.toLocaleString()}`;
-
-  const ldr = document.getElementById('sLeader');
-  if (leadingTeam) {
-    ldr.innerHTML = `${leadingTeam.logo?`<img src="${leadingTeam.logo}" alt=""/>`:''} ${leadingTeam.name}`;
-    ldr.style.background = leadingTeam.color; ldr.style.color='#000';
-  } else {
-    ldr.innerHTML='— No bid yet —'; ldr.style.background='#2a2a40'; ldr.style.color='#666';
-  }
-
-  const inc = getInc(currentBid, config);
-  const nextBid = currentBid + inc;
-  document.getElementById('nbbVal').textContent  = `₹${nextBid.toLocaleString()}`;
-  document.getElementById('nbbPill').textContent = `+₹${inc}`;
-  document.getElementById('nbbBase').textContent = `Base: ₹${p.basePrice}`;
-  const thresh = config.thresholdBid??200;
-  document.getElementById('nbbNote').textContent = currentBid < thresh
-    ? `→ Switches to +₹${config.lowIncrement} at ₹${thresh}`
-    : `Using +₹${config.lowIncrement} (above ₹${thresh})`;
-
-  btnSold.disabled   = !leadingTeam || phase !== 'live';
-  btnUnsold.disabled = phase !== 'live';
+  idle.style.display='none';content.style.display='';nbb.style.display='flex';
+  document.getElementById('sPhoto').src=p.photo;
+  document.getElementById('sPos').textContent=p.position;
+  document.getElementById('sName').textContent=p.name;
+  document.getElementById('sMeta').textContent=`Rating: ${p.rating}  ·  Base: ₹${p.basePrice}  ·  ID #${p.id}`;
+  document.getElementById('sBid').textContent=`₹${currentBid.toLocaleString()}`;
+  const ldr=document.getElementById('sLeader');
+  if(leadingTeam){
+    ldr.innerHTML=`${leadingTeam.logo?`<img src="${leadingTeam.logo}" alt=""/>`:''} ${leadingTeam.name}`;
+    ldr.style.background=leadingTeam.color;ldr.style.color='#000';
+  }else{ldr.innerHTML='— No bid —';ldr.style.background='#2a2a40';ldr.style.color='#555';}
+  const inc=getInc(currentBid,cfg);
+  const next=currentBid+inc;
+  document.getElementById('nbbVal').textContent=`₹${next.toLocaleString()}`;
+  document.getElementById('nbbPill').textContent=`+₹${inc}`;
+  document.getElementById('nbbBase').textContent=`Base: ₹${p.basePrice}`;
+  const thresh=cfg.thresholdBid??200;
+  document.getElementById('nbbNote').textContent=currentBid<thresh?`→ +₹${cfg.lowIncrement} at ₹${thresh}`:`Using +₹${cfg.lowIncrement}`;
+  bS.disabled=!leadingTeam||phase!=='live';
+  bU.disabled=phase!=='live';
 }
 
-function renderTeamGrid(as, teams, config) {
-  const { phase, currentBid } = as;
-  const div = document.getElementById('teamGrid');
-  div.innerHTML = teams.map(t => {
-    const rem    = t.budget - t.spent;
-    const maxBid = phase==='live' ? calcMaxBid(t, as, config) : 0;
-    const inc    = getInc(currentBid, config);
-    const next   = currentBid + inc;
-    const canBid = phase==='live' && next <= maxBid && next <= rem;
-    const overB  = phase==='live' && rem < next;
-    const overM  = phase==='live' && !overB && next > maxBid;
-    let warn = '';
-    if (overB) warn='⚠ No budget';
-    else if (overM) { const n=config.minPlayersPerTeam-t.players.length-1; warn=`⚠ Save for ${n} player${n!==1?'s':''}`; }
+function renderTeamGrid(as, teams, cfg) {
+  const {phase,currentBid}=as;
+  const div=document.getElementById('teamGrid');
+  div.innerHTML=teams.map(t=>{
+    const rem=t.budget-t.spent;
+    const maxB=phase==='live'?calcMax(t,as,cfg):0;
+    const inc=getInc(currentBid,cfg);
+    const next=currentBid+inc;
+    const canBid=phase==='live'&&next<=maxB&&next<=rem;
+    const overB=phase==='live'&&rem<next;
+    const overM=phase==='live'&&!overB&&next>maxB;
+    let warn='';
+    if(overB)warn='⚠ No budget';
+    else if(overM){const n=cfg.minPlayersPerTeam-t.players.length-1;warn=`⚠ Save for ${n} more`;}
     return `<button class="trb" style="border-color:${canBid?t.color:'var(--border)'}" onclick="raiseFor('${t.id}')" ${canBid?'':'disabled'}>
       ${t.logo?`<img class="trb-logo" src="${t.logo}" alt=""/>`:`<div class="trb-logo" style="border-radius:50%;background:${t.color};opacity:0.2"></div>`}
       <div class="trb-info">
         <div class="trb-name" style="color:${t.color}">${t.name}</div>
-        <div class="trb-meta">₹${rem.toLocaleString()} · ${t.players.length} players</div>
+        <div class="trb-meta">₹${rem.toLocaleString()} · ${t.players.length} pl.</div>
         ${warn?`<div class="trb-warn">${warn}</div>`:''}
       </div>
-      <div class="trb-right">
-        <div class="trb-raise-lbl">RAISE TO</div>
-        <div class="trb-raise-val" style="color:${canBid?t.color:'var(--tm)'}">₹${next.toLocaleString()}</div>
+      <div class="trb-r">
+        <div class="trb-rl">RAISE TO</div>
+        <div class="trb-rv" style="color:${canBid?t.color:'var(--tm)'}">₹${next.toLocaleString()}</div>
       </div>
     </button>`;
   }).join('');
 }
 
 function renderManualSel(teams) {
-  const sel = document.getElementById('manualTeam');
-  const cur = sel.value;
-  sel.innerHTML = teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
-  if (cur) sel.value=cur;
+  const sel=document.getElementById('manualTeam');
+  const cur=sel.value;
+  sel.innerHTML=teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  if(cur)sel.value=cur;
 }
 
-function renderTeams(as, teams, config) {
-  const div = document.getElementById('teamsPanel');
-  div.innerHTML = teams.map(t => {
-    const rem  = t.budget - t.spent;
-    const pct  = Math.max(0, (rem/t.budget)*100);
-    const maxB = as.phase==='live' ? calcMaxBid(t, as, config) : rem;
-    const need = Math.max(0, config.minPlayersPerTeam - t.players.length);
-    return `<div class="team-card" style="border-left-color:${t.color}">
-      <div class="tc-row1">
+function renderTeams(as, teams, cfg) {
+  const div=document.getElementById('teamsPanel');
+  div.innerHTML=teams.map(t=>{
+    const rem=t.budget-t.spent;
+    const pct=Math.max(0,(rem/t.budget)*100);
+    const maxB=as.phase==='live'?calcMax(t,as,cfg):rem;
+    const need=Math.max(0,cfg.minPlayersPerTeam-t.players.length);
+    return `<div class="tc" style="border-left-color:${t.color}">
+      <div class="tc-r1">
         ${t.logo?`<img class="tc-logo" src="${t.logo}" alt=""/>`:`<div class="tc-logo" style="border-radius:50%;background:${t.color};opacity:0.2"></div>`}
         <div style="flex:1;min-width:0">
           <div class="tc-name" style="color:${t.color}">${t.name}</div>
           <div class="tc-nums">₹${t.budget.toLocaleString()} · Spent: <span style="color:var(--yellow)">₹${t.spent.toLocaleString()}</span> · Left: <span style="color:var(--green)">₹${rem.toLocaleString()}</span></div>
-          ${as.phase==='live'?`<div class="tc-maxbid">Max bid: <span>₹${maxB.toLocaleString()}</span> · Need <span>${need}</span> more</div>`:`<div class="tc-maxbid">Still need: <span>${need}</span> player${need!==1?'s':''}</div>`}
+          ${as.phase==='live'?`<div class="tc-maxb">Max bid: <span>₹${maxB.toLocaleString()}</span> · Need <span>${need}</span> more</div>`:`<div class="tc-maxb">Need <span>${need}</span> more player${need!==1?'s':''}</div>`}
         </div>
         <div class="tc-acts">
           <button class="btn btn-ghost btn-sm" onclick="openTeamModal('${t.id}')">✏</button>
-          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="removeTeam('${t.id}')">✕</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="remTeam('${t.id}')">✕</button>
         </div>
       </div>
-      <div class="tc-bar"><div class="tc-bar-fill" style="width:${pct}%;background:${t.color}"></div></div>
+      <div class="tc-bar"><div class="tc-fill" style="width:${pct}%;background:${t.color}"></div></div>
       <div class="tc-chips">${t.players.map(p=>`<span class="tc-chip"><span style="color:${t.color}">${p.position}</span> ${p.name}</span>`).join('')}</div>
     </div>`;
   }).join('');
 }
 
 function renderPlayers() {
-  const { auctionState:as, players } = S;
-  const search = (document.getElementById('pSearch')?.value||'').toLowerCase();
-  const avail  = players.filter(p=>p.status==='available').length;
-  const sold   = players.filter(p=>p.status==='sold').length;
-  document.getElementById('pCount').textContent = `${avail} available · ${sold} sold · ${players.length-avail-sold} unsold`;
-
-  const filtered = players.filter(p=>{
-    const matchPos  = posFilter==='ALL'||p.position===posFilter;
-    const matchSrch = !search || p.name.toLowerCase().includes(search);
-    return matchPos && matchSrch;
+  const {auctionState:as,players}=S;
+  const srch=(document.getElementById('pSrch')?.value||'').toLowerCase();
+  const avail=players.filter(p=>p.status==='available').length;
+  const sold=players.filter(p=>p.status==='sold').length;
+  document.getElementById('pCount').textContent=`${avail} available · ${sold} sold · ${players.length-avail-sold} unsold`;
+  const filtered=players.filter(p=>{
+    return (posFilter==='ALL'||p.position===posFilter)&&(!srch||p.name.toLowerCase().includes(srch));
   });
-
-  const isLivePid = as.currentPlayer?.id;
-  document.getElementById('pTbody').innerHTML = filtered.map(p => {
-    const isLive = p.id===isLivePid && as.phase==='live';
-    const cls    = isLive?'live':p.status==='sold'?'sold':p.status==='unsold'?'unsold':'';
-    const stEl   = isLive
-      ?`<span class="stat-tag st-l">LIVE</span>`
-      :p.status==='sold'
-      ?`<span class="stat-tag st-s">SOLD ₹${(p.soldPrice||0).toLocaleString()}</span>`
-      :p.status==='unsold'
-      ?`<span class="stat-tag st-u">UNSOLD</span>`
-      :`<span class="stat-tag st-a">AVAIL</span>`;
-    const canStart = p.status==='available' && as.phase==='idle';
+  const livePid=as.currentPlayer?.id;
+  document.getElementById('pTbody').innerHTML=filtered.map(p=>{
+    const isLive=p.id===livePid&&as.phase==='live';
+    const cls=isLive?'live':p.status==='sold'?'sold':p.status==='unsold'?'unsold':'';
+    const stEl=isLive?`<span class="stag sl">LIVE</span>`:p.status==='sold'?`<span class="stag ss">SOLD ₹${(p.soldPrice||0).toLocaleString()}</span>`:p.status==='unsold'?`<span class="stag su">UNSOLD</span>`:`<span class="stag sa">AVAIL</span>`;
+    const canStart=p.status==='available'&&as.phase==='idle';
     return `<tr class="${cls}">
       <td><img class="pphoto" src="${p.photo}" alt=""/></td>
-      <td style="font-weight:700;font-size:0.95rem">${p.name}</td>
+      <td style="font-weight:700;font-size:0.92rem">${p.name}</td>
       <td><span class="pos-tag">${p.position}</span></td>
-      <td style="font-family:var(--ffm);color:var(--green);font-size:0.78rem">${p.rating}</td>
-      <td style="font-family:var(--ffm);font-size:0.78rem">₹${p.basePrice}</td>
+      <td style="font-family:var(--ffm);color:var(--green);font-size:0.76rem">${p.rating}</td>
+      <td style="font-family:var(--ffm);font-size:0.76rem">₹${p.basePrice}</td>
       <td>${stEl}</td>
-      <td><div class="act-btns">
-        <button class="start-btn" onclick="startAuction(${p.id})" ${canStart?'':'disabled'}>▶</button>
-        <button class="ic-btn edit" onclick="openEditModal(${p.id})">✏</button>
-        ${p.status==='unsold'?`<button class="ic-btn rst" onclick="resetPlayer(${p.id})">↩</button>`:''}
-        ${p.status==='available'?`<button class="ic-btn del" onclick="removePlayer(${p.id})">✕</button>`:''}
+      <td><div class="act-row">
+        <button class="stbtn" onclick="startAuction(${p.id})" ${canStart?'':'disabled'}>▶</button>
+        <button class="icbtn ed" onclick="openEditModal(${p.id})">✏</button>
+        ${p.status==='unsold'?`<button class="icbtn rst" onclick="resetPlayer(${p.id})">↩</button>`:''}
+        ${p.status==='available'?`<button class="icbtn del" onclick="remPlayer(${p.id})">✕</button>`:''}
       </div></td>
     </tr>`;
   }).join('');
 }
 
 function renderBidLog(bids) {
-  const div = document.getElementById('bidLog');
-  document.getElementById('bidLogCount').textContent = bids?.length ? `${bids.length} bid${bids.length!==1?'s':''}` : '';
-  if (!bids?.length) { div.innerHTML='<div style="color:var(--tm);font-style:italic;font-size:0.88rem">No bids yet</div>'; return; }
-  div.innerHTML = bids.slice(0,25).map((b,i) => `
+  const div=document.getElementById('bidLog');
+  document.getElementById('blCount').textContent=bids?.length?`${bids.length} bid${bids.length!==1?'s':''}`:'' ;
+  if(!bids?.length){div.innerHTML='<div style="color:var(--tm);font-style:italic;font-size:0.85rem">No bids yet</div>';return;}
+  div.innerHTML=bids.slice(0,25).map((b,i)=>`
     <div class="bl" style="border-left-color:${b.color}">
       ${b.logo?`<img src="${b.logo}" alt=""/>`:''}
       <span class="bl-team" style="color:${b.color}">${i===0?'🏆 ':''}${b.team}</span>
@@ -779,18 +679,18 @@ function renderBidLog(bids) {
     </div>`).join('');
 }
 
-function renderSoldPanel(sold) {
-  const div = document.getElementById('soldPanel');
-  const tot = sold?.reduce((s,x)=>s+x.price,0)||0;
-  document.getElementById('soldMeta').textContent = sold?.length ? `${sold.length} sold · ₹${tot.toLocaleString()} total` : '';
-  if (!sold?.length) { div.innerHTML='<div style="color:var(--tm);font-style:italic;font-size:0.88rem">No sales yet</div>'; return; }
-  div.innerHTML = [...sold].reverse().map(s=>`
+function renderSold(sold) {
+  const div=document.getElementById('soldPanel');
+  const tot=sold?.reduce((s,x)=>s+x.price,0)||0;
+  document.getElementById('soldMeta').textContent=sold?.length?`${sold.length} sold · ₹${tot.toLocaleString()} total`:'';
+  if(!sold?.length){div.innerHTML='<div style="color:var(--tm);font-style:italic;font-size:0.85rem">No sales yet</div>';return;}
+  div.innerHTML=[...sold].reverse().map(s=>`
     <div class="si">
-      <img class="photo" src="${s.player.photo}" alt=""/>
+      <img class="ph" src="${s.player.photo}" alt=""/>
       <div style="flex:1;min-width:0">
         <div class="si-name">${s.player.name} <span class="si-pos">${s.player.position}</span></div>
-        <div style="display:flex;align-items:center;gap:0.35rem">
-          ${s.teamLogo?`<img class="si-tlogo" src="${s.teamLogo}" alt=""/>`:''}
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          ${s.teamLogo?`<img class="si-tl" src="${s.teamLogo}" alt=""/>`:''}
           <span class="si-team" style="color:${s.teamColor}">${s.team}</span>
         </div>
       </div>
@@ -799,195 +699,131 @@ function renderSoldPanel(sold) {
 }
 
 function renderPosFilters(players) {
-  const div = document.getElementById('posFilter');
-  const pos = ['ALL', ...new Set(players.map(p=>p.position))].filter(Boolean);
-  div.innerHTML = pos.map(p=>`<button class="tf ${posFilter===p?'active':''}" onclick="setPosFilter('${p}')">${p}</button>`).join('');
+  const div=document.getElementById('posFilter');
+  const pos=['ALL',...new Set(players.map(p=>p.position))].filter(Boolean);
+  div.innerHTML=pos.map(p=>`<button class="tf ${posFilter===p?'active':''}" onclick="setPF('${p}')">${p}</button>`).join('');
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function getInc(bid, config) {
-  return bid < (config.thresholdBid??200) ? (config.highIncrement??20) : (config.lowIncrement??10);
+function getInc(bid,cfg){return bid<(cfg.thresholdBid??200)?(cfg.highIncrement??20):(cfg.lowIncrement??10);}
+function calcMax(team,as,cfg){
+  const rem=team.budget-team.spent;
+  const sn=Math.max(0,(cfg.minPlayersPerTeam??10)-team.players.length-1);
+  if(sn===0)return rem;
+  const pool=S.players.filter(p=>p.status==='available'&&p.id!==as.currentPlayer?.id).map(p=>p.basePrice).sort((a,b)=>a-b).slice(0,sn);
+  while(pool.length<sn)pool.push(pool[pool.length-1]??0);
+  return Math.max(0,rem-pool.reduce((s,v)=>s+v,0));
 }
-function calcMaxBid(team, as, config) {
-  const rem      = team.budget - team.spent;
-  const stillNeed = Math.max(0, (config.minPlayersPerTeam??10) - team.players.length - 1);
-  if (stillNeed===0) return rem;
-  const pool = S.players
-    .filter(p=>p.status==='available'&&p.id!==as.currentPlayer?.id)
-    .map(p=>p.basePrice).sort((a,b)=>a-b).slice(0,stillNeed);
-  while(pool.length<stillNeed) pool.push(pool[pool.length-1]??0);
-  return Math.max(0, rem - pool.reduce((s,v)=>s+v,0));
+function previewUrl(inputId,previewId){
+  const url=document.getElementById(inputId).value.trim();
+  document.getElementById(previewId).src=url||'';
 }
-
-// ── IMAGE UPLOAD ──────────────────────────────────────────────────────────────
-async function handlePhotoUpload(inputId, previewId, urlId) {
-  const file = document.getElementById(inputId).files[0];
-  if (!file) return;
-  const spinnerId = inputId.replace('File','Spinner');
-  const spinner   = document.getElementById(spinnerId);
-  if (spinner) spinner.style.display='inline-block';
-
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const base64 = e.target.result;
-    try {
-      const resp = await fetch('/api/upload', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ data: base64 })
-      });
-      const { url } = await resp.json();
-      document.getElementById(urlId).value      = url;
-      document.getElementById(previewId).src    = url;
-      document.getElementById(previewId).style.display = 'block';
-    } catch(err) {
-      console.error('Upload failed', err);
-    } finally {
-      if (spinner) spinner.style.display='none';
-    }
-  };
-  reader.readAsDataURL(file);
-}
+function timeAgo(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return`${s}s`;if(s<3600)return`${Math.floor(s/60)}m`;return`${Math.floor(s/3600)}h`;}
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-function startAuction(id) { socket.emit('admin:startAuction', { playerId:id }); }
-function doSold()    { if(confirm('⚡ Confirm SOLD to ' + (S.auctionState.leadingTeam?.name||'') + ' @ ₹' + S.auctionState.currentBid + '?')) socket.emit('admin:sold'); }
-function doUnsold()  { socket.emit('admin:unsold'); }
-function doIdle()    { socket.emit('admin:idle'); hasUndo=false; document.getElementById('btnUndo').disabled=true; }
-function doUndo()    { socket.emit('admin:undoBid'); }
-
-function raiseFor(teamId) {
-  const inc = getInc(S.auctionState.currentBid, S.config);
-  socket.emit('placeBid', { teamId, amount: S.auctionState.currentBid + inc });
-}
-
-function placeManualBid() {
-  const teamId = document.getElementById('manualTeam').value;
-  const amount = parseFloat(document.getElementById('manualAmt').value);
-  if (!amount || isNaN(amount)) { document.getElementById('bidErr').textContent='Enter a valid amount'; return; }
-  socket.emit('placeBid', { teamId, amount });
+function startAuction(id){socket.emit('admin:startAuction',{playerId:id});}
+function doSold(){if(confirm(`⚡ SOLD to ${S.auctionState.leadingTeam?.name} @ ₹${S.auctionState.currentBid}?`))socket.emit('admin:sold');}
+function doUnsold(){socket.emit('admin:unsold');}
+function doIdle(){socket.emit('admin:idle');document.getElementById('btnUndo').disabled=true;}
+function doUndo(){socket.emit('admin:undoBid');}
+function raiseFor(tid){socket.emit('placeBid',{teamId:tid,amount:S.auctionState.currentBid+getInc(S.auctionState.currentBid,S.config)});}
+function placeManual(){
+  const tid=document.getElementById('manualTeam').value;
+  const amt=parseFloat(document.getElementById('manualAmt').value);
+  if(!amt||isNaN(amt)){document.getElementById('bidErr').textContent='Enter a valid amount';return;}
+  socket.emit('placeBid',{teamId:tid,amount:amt});
   document.getElementById('manualAmt').value='';
 }
-
-function removePlayer(id) { if(confirm('Remove player?')) socket.emit('admin:removePlayer',{playerId:id}); }
-function resetPlayer(id)  { socket.emit('admin:resetPlayer',{playerId:id}); }
-function removeTeam(id)   { if(confirm('Remove team?')) socket.emit('admin:removeTeam',{teamId:id}); }
-function setPosFilter(p)  { posFilter=p; renderPlayers(); }
-
-function confirmReset() {
-  if (confirm('⚠️ RESET ALL TEAMS?\n\nThis will:\n- Clear all squads\n- Reset all budgets\n- Return all sold players to the pool\n\nThis cannot be undone!')) {
+function remPlayer(id){if(confirm('Remove player?'))socket.emit('admin:removePlayer',{playerId:id});}
+function resetPlayer(id){socket.emit('admin:resetPlayer',{playerId:id});}
+function remTeam(id){if(confirm('Remove team?'))socket.emit('admin:removeTeam',{teamId:id});}
+function setPF(p){posFilter=p;renderPlayers();}
+function confirmReset(){
+  if(confirm('⚠️ RESET ALL?\n\nClears all squads, budgets restored, players back to pool.'))
     socket.emit('admin:resetAllTeams');
-  }
 }
 
-// ── SAVE PLAYER ──────────────────────────────────────────────────────────────
-function savePlayer() {
-  const name = document.getElementById('pName').value.trim();
-  const base = parseFloat(document.getElementById('pBase').value);
-  if (!name||!base) { alert('Name and base price required.'); return; }
-  socket.emit('admin:addPlayer', {
-    name, position: document.getElementById('pPos').value,
-    rating: parseInt(document.getElementById('pRating').value)||75,
-    basePrice: base,
-    photo: document.getElementById('pPhotoUrl').value || '',
-  });
-  ['pName','pBase','pRating','pPhotoUrl'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('pPhotoPreview').src='https://ui-avatars.com/api/?name=Player&background=0d1117&color=00e87a&size=80';
+// ── SAVE PLAYER ────────────────────────────────────────────────────────────
+function savePlayer(){
+  const name=document.getElementById('pName').value.trim();
+  const base=parseFloat(document.getElementById('pBase').value);
+  if(!name||!base){alert('Name and base price required.');return;}
+  socket.emit('admin:addPlayer',{name,position:document.getElementById('pPos').value,rating:parseInt(document.getElementById('pRating').value)||75,basePrice:base,photo:document.getElementById('pPhoto').value.trim()});
+  ['pName','pBase','pRating','pPhoto'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pPhotoPreview').src='';
 }
 
-// ── EDIT PLAYER MODAL ─────────────────────────────────────────────────────────
-function openEditModal(id) {
-  const p=S.players.find(x=>x.id===id); if(!p) return;
+// ── EDIT PLAYER MODAL ────────────────────────────────────────────────────────
+function openEditModal(id){
+  const p=S.players.find(x=>x.id===id);if(!p)return;
   document.getElementById('emId').value=p.id;
   document.getElementById('emName').value=p.name;
   document.getElementById('emPos').value=p.position;
   document.getElementById('emRating').value=p.rating;
   document.getElementById('emBase').value=p.basePrice;
-  document.getElementById('emPhotoUrl').value=p.photo||'';
+  document.getElementById('emPhoto').value=p.photo||'';
   document.getElementById('emPhotoPreview').src=p.photo||'';
   openModal('editModal');
 }
-function saveEditPlayer() {
-  const id=parseInt(document.getElementById('emId').value);
-  const newPhoto = document.getElementById('emPhotoUrl').value.trim();
-  socket.emit('admin:editPlayer',{
-    id, name:document.getElementById('emName').value.trim(),
-    position:document.getElementById('emPos').value,
-    rating:parseInt(document.getElementById('emRating').value)||75,
-    basePrice:parseFloat(document.getElementById('emBase').value)||100,
-    photo: newPhoto,
-  });
+function saveEditPlayer(){
+  socket.emit('admin:editPlayer',{id:parseInt(document.getElementById('emId').value),name:document.getElementById('emName').value.trim(),position:document.getElementById('emPos').value,rating:parseInt(document.getElementById('emRating').value)||75,basePrice:parseFloat(document.getElementById('emBase').value)||100,photo:document.getElementById('emPhoto').value.trim()});
   closeModal('editModal');
 }
 
 // ── TEAM MODAL ────────────────────────────────────────────────────────────────
-function openTeamModal(id) {
-  const t = id ? S.teams.find(x=>x.id===id) : null;
-  document.getElementById('tmTitle').textContent = t?'Edit Team':'Add Team';
-  document.getElementById('tmId').value     = t?.id || ('T'+Date.now());
-  document.getElementById('tmName').value   = t?.name||'';
-  document.getElementById('tmColor').value  = t?.color||'#e63946';
-  document.getElementById('tmBudget').value = t?.budget||8000;
-  document.getElementById('tmLogoUrl').value= t?.logo||'';
-  document.getElementById('tmLogoPreview').src = t?.logo||'';
+function openTeamModal(id){
+  const t=id?S.teams.find(x=>x.id===id):null;
+  document.getElementById('tmTitle').textContent=t?'Edit Team':'Add Team';
+  document.getElementById('tmId').value=t?.id||('T'+Date.now());
+  document.getElementById('tmName').value=t?.name||'';
+  document.getElementById('tmColor').value=t?.color||'#e63946';
+  document.getElementById('tmBudget').value=t?.budget||8000;
+  document.getElementById('tmLogo').value=t?.logo||'';
+  document.getElementById('tmLogoPreview').src=t?.logo||'';
   openModal('teamModal');
 }
-function saveTeam() {
-  const name   = document.getElementById('tmName').value.trim();
-  const budget = parseFloat(document.getElementById('tmBudget').value);
-  if (!name||!budget) { alert('Name and budget required.'); return; }
-  socket.emit('admin:saveTeam',{
-    id: document.getElementById('tmId').value, name,
-    color: document.getElementById('tmColor').value,
-    budget, logo: document.getElementById('tmLogoUrl').value.trim(),
-  });
+function saveTeam(){
+  const name=document.getElementById('tmName').value.trim();
+  const budget=parseFloat(document.getElementById('tmBudget').value);
+  if(!name||!budget){alert('Name and budget required.');return;}
+  socket.emit('admin:saveTeam',{id:document.getElementById('tmId').value,name,color:document.getElementById('tmColor').value,budget,logo:document.getElementById('tmLogo').value.trim()});
   closeModal('teamModal');
 }
 
-// ── SETTINGS MODAL ────────────────────────────────────────────────────────────
-function openSettings() {
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function openSettings(){
   const c=S.config;
-  document.getElementById('cfgName').value  = c.leagueName||'';
-  document.getElementById('cfgSeason').value= c.leagueSeason||'';
-  document.getElementById('cfgLogoUrl').value=c.leagueLogo||'';
+  document.getElementById('cfgName').value=c.leagueName||'';
+  document.getElementById('cfgSeason').value=c.leagueSeason||'';
+  document.getElementById('cfgLogo').value=c.leagueLogo||'';
   document.getElementById('cfgLogoPreview').src=c.leagueLogo||'';
-  document.getElementById('cfgMin').value   = c.minPlayersPerTeam||10;
-  document.getElementById('cfgThresh').value= c.thresholdBid||200;
-  document.getElementById('cfgHi').value    = c.highIncrement||20;
-  document.getElementById('cfgLo').value    = c.lowIncrement||10;
-  document.getElementById('cfgPw').value    = '';
-  updateIncPreview();
+  document.getElementById('cfgMin').value=c.minPlayersPerTeam||10;
+  document.getElementById('cfgThresh').value=c.thresholdBid||200;
+  document.getElementById('cfgHi').value=c.highIncrement||20;
+  document.getElementById('cfgLo').value=c.lowIncrement||10;
+  document.getElementById('cfgPw').value='';
+  updateIncPrev();
   openModal('settingsModal');
 }
-function updateIncPreview() {
+function updateIncPrev(){
   const t=parseInt(document.getElementById('cfgThresh').value)||200;
   const hi=parseInt(document.getElementById('cfgHi').value)||20;
   const lo=parseInt(document.getElementById('cfgLo').value)||10;
-  document.getElementById('incPreview').innerHTML=`Increment: <span>+₹${hi}</span> while bid &lt; ₹${t} → switches to <span>+₹${lo}</span> at ₹${t}`;
+  document.getElementById('incPrev').innerHTML=`Increment: <span>+₹${hi}</span> while bid &lt; ₹${t} → switches to <span>+₹${lo}</span> at ₹${t}`;
 }
-function saveSettings() {
-  const cfg = {
-    leagueName:       document.getElementById('cfgName').value.trim(),
-    leagueSeason:     document.getElementById('cfgSeason').value.trim(),
-    leagueLogo:       document.getElementById('cfgLogoUrl').value.trim(),
-    minPlayersPerTeam:parseInt(document.getElementById('cfgMin').value)||10,
-    thresholdBid:     parseInt(document.getElementById('cfgThresh').value)||200,
-    highIncrement:    parseInt(document.getElementById('cfgHi').value)||20,
-    lowIncrement:     parseInt(document.getElementById('cfgLo').value)||10,
-  };
-  const pw = document.getElementById('cfgPw').value.trim();
-  if (pw) cfg.adminPassword = pw;
-  socket.emit('admin:updateConfig', cfg);
+function saveSettings(){
+  const cfg={leagueName:document.getElementById('cfgName').value.trim(),leagueSeason:document.getElementById('cfgSeason').value.trim(),leagueLogo:document.getElementById('cfgLogo').value.trim(),minPlayersPerTeam:parseInt(document.getElementById('cfgMin').value)||10,thresholdBid:parseInt(document.getElementById('cfgThresh').value)||200,highIncrement:parseInt(document.getElementById('cfgHi').value)||20,lowIncrement:parseInt(document.getElementById('cfgLo').value)||10};
+  const pw=document.getElementById('cfgPw').value.trim();
+  if(pw)cfg.adminPassword=pw;
+  socket.emit('admin:updateConfig',cfg);
   closeModal('settingsModal');
 }
 
 // ── MODALS ────────────────────────────────────────────────────────────────────
-function openModal(id)  { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
-document.querySelectorAll('.modal-bg').forEach(el=>{ el.addEventListener('click',e=>{ if(e.target===el) closeModal(el.id); }); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(el=>closeModal(el.id)); });
-
-function timeAgo(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return`${s}s`;if(s<3600)return`${Math.floor(s/60)}m`;return`${Math.floor(s/3600)}h`;}
-
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.mbg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mbg.open').forEach(el=>closeModal(el.id));});
 render();
 </script>
 </body>
