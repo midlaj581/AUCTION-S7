@@ -109,11 +109,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 
 /* ── BID CONTROLS ─────────────────────────────────────────────────────── */
 .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
-.trb{
-  display:flex;align-items:center;gap:0.6rem;padding:0.7rem 0.85rem;
-  background:var(--bg3);border:2px solid var(--border);border-radius:var(--r);
-  cursor:pointer;transition:all 0.15s;
-}
+.trb{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 0.85rem;background:var(--bg3);border:2px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all 0.15s}
 .trb:hover:not(:disabled){background:var(--bg4);border-color:var(--green)}
 .trb:active:not(:disabled){transform:scale(0.97)}
 .trb:disabled{opacity:0.28;cursor:not-allowed}
@@ -182,9 +178,44 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 .fi,.fsel{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ffi);font-size:0.9rem;padding:0.42rem 0.62rem;outline:none;border-radius:var(--r);transition:border-color 0.15s}
 .fi:focus,.fsel:focus{border-color:var(--gb)}
 .fsel option{background:var(--bg3)}
-/* URL + preview row */
-.url-row{display:flex;gap:0.5rem;align-items:center}
-.url-preview{width:44px;height:44px;border-radius:var(--r);object-fit:cover;object-position:top;background:var(--bg4);border:1px solid var(--border);flex-shrink:0}
+
+/* ── PHOTO UPLOAD WIDGET ─────────────────────────────────────────────────── */
+/* Step 6: Added spin animation + upload button styles */
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.photo-field{display:flex;flex-direction:column;gap:0.4rem}
+.photo-field .url-row{display:flex;gap:0.5rem;align-items:center}
+.url-preview{
+  width:48px;height:48px;border-radius:var(--r);object-fit:cover;object-position:top;
+  background:var(--bg4);border:1px solid var(--border);flex-shrink:0;
+  /* hide broken-image icon when src is empty */
+  color:transparent;font-size:0;
+}
+.upload-btn-row{display:flex;align-items:center;gap:0.5rem}
+.upload-label{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  padding:0.36rem 0.75rem;
+  background:var(--bg3);border:1px dashed var(--border);
+  border-radius:var(--r);cursor:pointer;
+  font-family:var(--ffi);font-size:0.78rem;color:var(--td);
+  transition:all 0.15s;user-select:none;
+}
+.upload-label:hover{border-color:var(--gb);color:var(--green);background:var(--gd)}
+.upload-label input[type=file]{display:none}
+.upload-spinner{
+  width:13px;height:13px;flex-shrink:0;
+  border:2px solid var(--border);border-top-color:var(--green);
+  border-radius:50%;animation:spin 0.6s linear infinite;
+  display:none;
+}
+.upload-spinner.active{display:inline-block}
+.upload-status{
+  font-family:var(--ffm);font-size:0.6rem;
+  min-height:1em;margin-top:0.1rem;
+}
+.upload-status.ok{color:var(--green)}
+.upload-status.err{color:var(--red)}
+.upload-status.loading{color:var(--td)}
 
 /* ── TEAMS ─────────────────────────────────────────────────────────────── */
 .tc{background:var(--bg3);border-radius:var(--r);padding:0.85rem 0.95rem;border-left:4px solid;margin-bottom:0.6rem}
@@ -304,9 +335,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
       <span class="bid-err" id="bidErr"></span>
     </div>
     <div class="pb" style="display:flex;flex-direction:column;gap:0.85rem">
-
       <div class="team-grid" id="teamGrid"></div>
-
       <div class="manual-wrap">
         <div class="manual-title">Manual entry — type any amount (min = base price)</div>
         <div class="manual-row">
@@ -315,7 +344,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
           <button class="btn btn-blue" onclick="placeManual()">Place</button>
         </div>
       </div>
-
       <div class="hammer-row">
         <button class="btn btn-green" id="btnSold"   onclick="doSold()"   disabled>🔨 SOLD!</button>
         <button class="btn btn-red"   id="btnUnsold" onclick="doUnsold()" disabled>✗ UNSOLD</button>
@@ -361,13 +389,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
         </div>
         <div><label class="fl">Rating (1–99)</label><input class="fi" id="pRating" type="number" min="1" max="99" placeholder="80"/></div>
         <div><label class="fl">Base Price (₹) *</label><input class="fi" id="pBase" type="number" placeholder="100" min="1"/></div>
+
+        <!-- PHOTO FIELD 1: Add Player — Step 4 applied here -->
         <div class="full">
-          <label class="fl">Photo URL (paste link — leave blank for auto avatar)</label>
-          <div class="url-row">
-            <img class="url-preview" id="pPhotoPreview" src="" alt=""/>
-            <input class="fi" id="pPhoto" placeholder="https://… direct image link" oninput="previewUrl('pPhoto','pPhotoPreview')"/>
+          <label class="fl">Player Photo</label>
+          <div class="photo-field">
+            <div class="url-row">
+              <img class="url-preview" id="pPhotoPreview" src="" alt=""/>
+              <input class="fi" id="pPhoto" placeholder="Paste image URL, or upload below ↓" oninput="previewUrl('pPhoto','pPhotoPreview')"/>
+            </div>
+            <div class="upload-btn-row">
+              <label class="upload-label">
+                📷 Upload from device
+                <input type="file" accept="image/*" onchange="uploadToCloudinary(this,'pPhoto','pPhotoPreview','pPhotoStatus')"/>
+                <span class="upload-spinner" id="pPhotoSpinner"></span>
+              </label>
+              <span class="upload-status" id="pPhotoStatus"></span>
+            </div>
           </div>
         </div>
+        <!-- END PHOTO FIELD 1 -->
+
       </div>
       <button class="btn btn-green" style="margin-top:0.7rem;width:100%;justify-content:center" onclick="savePlayer()">+ Save Player</button>
     </div>
@@ -401,13 +443,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
         <div style="flex:0 0 85px"><label class="fl">Color</label><input class="fi" id="tmColor" type="color" value="#e63946" style="height:40px;padding:2px 4px;cursor:pointer"/></div>
         <div style="flex:1"><label class="fl">Budget (₹) *</label><input class="fi" id="tmBudget" type="number" placeholder="8000"/></div>
       </div>
+
+      <!-- PHOTO FIELD 2: Team Logo — Step 4 applied here -->
       <div>
-        <label class="fl">Team Logo URL</label>
-        <div class="url-row">
-          <img class="url-preview" id="tmLogoPreview" src="" alt="" style="background:var(--bg4)"/>
-          <input class="fi" id="tmLogo" placeholder="https://… logo image URL" oninput="previewUrl('tmLogo','tmLogoPreview')"/>
+        <label class="fl">Team Logo</label>
+        <div class="photo-field">
+          <div class="url-row">
+            <img class="url-preview" id="tmLogoPreview" src="" alt="" style="background:var(--bg4)"/>
+            <input class="fi" id="tmLogo" placeholder="Paste logo URL, or upload below ↓" oninput="previewUrl('tmLogo','tmLogoPreview')"/>
+          </div>
+          <div class="upload-btn-row">
+            <label class="upload-label">
+              📷 Upload from device
+              <input type="file" accept="image/*" onchange="uploadToCloudinary(this,'tmLogo','tmLogoPreview','tmLogoStatus')"/>
+              <span class="upload-spinner" id="tmLogoSpinner"></span>
+            </label>
+            <span class="upload-status" id="tmLogoStatus"></span>
+          </div>
         </div>
       </div>
+      <!-- END PHOTO FIELD 2 -->
+
       <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.3rem" onclick="saveTeam()">Save Team</button>
     </div>
   </div>
@@ -429,13 +485,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
       </div>
       <div><label class="fl">Rating</label><input class="fi" id="emRating" type="number" min="1" max="99"/></div>
       <div><label class="fl">Base Price (₹)</label><input class="fi" id="emBase" type="number"/></div>
+
+      <!-- PHOTO FIELD 3: Edit Player — Step 4 applied here -->
       <div class="full">
-        <label class="fl">Photo URL</label>
-        <div class="url-row">
-          <img class="url-preview" id="emPhotoPreview" src="" alt=""/>
-          <input class="fi" id="emPhoto" placeholder="https://… or blank for auto avatar" oninput="previewUrl('emPhoto','emPhotoPreview')"/>
+        <label class="fl">Player Photo</label>
+        <div class="photo-field">
+          <div class="url-row">
+            <img class="url-preview" id="emPhotoPreview" src="" alt=""/>
+            <input class="fi" id="emPhoto" placeholder="Paste URL, or upload below ↓" oninput="previewUrl('emPhoto','emPhotoPreview')"/>
+          </div>
+          <div class="upload-btn-row">
+            <label class="upload-label">
+              📷 Upload from device
+              <input type="file" accept="image/*" onchange="uploadToCloudinary(this,'emPhoto','emPhotoPreview','emPhotoStatus')"/>
+              <span class="upload-spinner" id="emPhotoSpinner"></span>
+            </label>
+            <span class="upload-status" id="emPhotoStatus"></span>
+          </div>
         </div>
       </div>
+      <!-- END PHOTO FIELD 3 -->
+
     </div>
     <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:0.75rem" onclick="saveEditPlayer()">Save Changes</button>
   </div>
@@ -449,13 +519,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
     <div class="sf">
       <div class="full"><label class="fl">League Name</label><input class="fi" id="cfgName"/></div>
       <div class="full"><label class="fl">Season</label><input class="fi" id="cfgSeason"/></div>
+
+      <!-- PHOTO FIELD 4: League Logo — Step 4 applied here -->
       <div class="full">
-        <label class="fl">League Logo URL</label>
-        <div class="url-row">
-          <img class="url-preview" id="cfgLogoPreview" src="" alt="" style="background:var(--bg4)"/>
-          <input class="fi" id="cfgLogo" placeholder="https://… logo URL" oninput="previewUrl('cfgLogo','cfgLogoPreview')"/>
+        <label class="fl">League Logo</label>
+        <div class="photo-field">
+          <div class="url-row">
+            <img class="url-preview" id="cfgLogoPreview" src="" alt="" style="background:var(--bg4)"/>
+            <input class="fi" id="cfgLogo" placeholder="Paste logo URL, or upload below ↓" oninput="previewUrl('cfgLogo','cfgLogoPreview')"/>
+          </div>
+          <div class="upload-btn-row">
+            <label class="upload-label">
+              📷 Upload from device
+              <input type="file" accept="image/*" onchange="uploadToCloudinary(this,'cfgLogo','cfgLogoPreview','cfgLogoStatus')"/>
+              <span class="upload-spinner" id="cfgLogoSpinner"></span>
+            </label>
+            <span class="upload-status" id="cfgLogoStatus"></span>
+          </div>
         </div>
       </div>
+      <!-- END PHOTO FIELD 4 -->
+
       <div><label class="fl">Min Players / Team</label><input class="fi" id="cfgMin" type="number" min="1"/></div>
       <div></div>
       <div><label class="fl">Bid Threshold (₹)</label><input class="fi" id="cfgThresh" type="number" oninput="updateIncPrev()"/></div>
@@ -474,6 +558,67 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:15px
 const socket = io();
 let S = { auctionState:{phase:'idle',currentBid:0,bidHistory:[],soldPlayers:[]}, teams:[], players:[], config:{} };
 let posFilter = 'ALL';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STEP 5: CLOUDINARY UPLOAD FUNCTION
+// Cloud name: dvkcsb1xh  |  Preset: ppl_auction (unsigned)
+// ═══════════════════════════════════════════════════════════════════════════
+const CLOUDINARY_CLOUD_NAME   = 'dvkcsb1xh';
+const CLOUDINARY_UPLOAD_PRESET = 'ppl_auction';
+
+async function uploadToCloudinary(fileInput, urlFieldId, previewId, statusId) {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  // Find the spinner that's INSIDE this label (sibling of the input)
+  const spinner = fileInput.parentElement.querySelector('.upload-spinner');
+  const statusEl = document.getElementById(statusId);
+
+  // Show loading state
+  if (spinner)   spinner.classList.add('active');
+  if (statusEl)  { statusEl.textContent = 'Uploading…'; statusEl.className = 'upload-status loading'; }
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', 'ppl');  // organises all PPL photos in one folder on Cloudinary
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: 'POST', body: formData }
+    );
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+
+    if (data.secure_url) {
+      // Put the permanent Cloudinary URL into the text field
+      document.getElementById(urlFieldId).value = data.secure_url;
+      // Show preview image
+      const preview = document.getElementById(previewId);
+      preview.src = data.secure_url;
+      // Success message shows filename
+      if (statusEl) { statusEl.textContent = '✓ Uploaded: ' + file.name; statusEl.className = 'upload-status ok'; }
+      // Clear status after 4 seconds
+      setTimeout(() => { if (statusEl) { statusEl.textContent = ''; statusEl.className = 'upload-status'; } }, 4000);
+    } else {
+      throw new Error(data.error?.message || 'Upload failed — check your preset name');
+    }
+
+  } catch (err) {
+    if (statusEl) { statusEl.textContent = '✕ ' + err.message; statusEl.className = 'upload-status err'; }
+    console.error('Cloudinary upload error:', err);
+  } finally {
+    // Hide spinner and reset file input (allows re-selecting same file)
+    if (spinner) spinner.classList.remove('active');
+    fileInput.value = '';
+  }
+}
+// ═══════════════════════════════════════════════════════════════════════════
+// END CLOUDINARY SECTION
+// ═══════════════════════════════════════════════════════════════════════════
 
 // ── LOGIN ────────────────────────────────────────────────────────────────────
 document.getElementById('pwIn').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
